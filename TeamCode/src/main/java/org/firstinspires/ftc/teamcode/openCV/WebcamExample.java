@@ -42,8 +42,8 @@ public class WebcamExample extends LinearOpMode
 {
     OpenCvWebcam webcam;
     bluegrip.GripPipelineBlue gripPipelineBlue = new bluegrip.GripPipelineBlue();
-    //gripred.GripPipelineRed gripPipelineRed = new gripred.GripPipelineRed();
-    //gripgreen.GripPipelineGreen gripPipelineGreen = new gripgreen.GripPipelineGreen();
+    gripred.GripPipelineRed gripPipelineRed = new gripred.GripPipelineRed();
+    gripgreen.GripPipelineGreen gripPipelineGreen = new gripgreen.GripPipelineGreen();
 
     @Override
     public void runOpMode()
@@ -243,22 +243,74 @@ public class WebcamExample extends LinearOpMode
                             input.cols(),
                             input.rows()),
                     new Scalar(0, 255, 0), 4);*/
-            input = gripPipelineBlue.process(input);
-            telemetry.addLine("test");
-            telemetry.update();
-            if (gripPipelineBlue.getFindContoursOutput() != null)
+            /*if (gripPipelineGreen.getFindContoursOutput().size() == 1)
+            {
+                input = gripPipelineGreen.process(input);
+            }
+            else if (gripPipelineBlue.getFindContoursOutput().size() == 1)
+            {
+                input = gripPipelineBlue.process(input);
+            }
+            else if (gripPipelineRed.getFindContoursOutput().size() == 1)
+            {
+
+            }*/
+            Mat output;
+
+            output = gripPipelineRed.process(input);
+            output = gripPipelineBlue.process(input);
+            output = gripPipelineGreen.process(input);
+
+            //telemetry.addLine("test");
+            //telemetry.update();
+            if (gripPipelineBlue.getFindContoursOutput() != null) {
                 //if (!gripPipelineBlue.keyPoints.isEmpty()) {
-                    telemetry.addData("size is ", gripPipelineBlue.getFindContoursOutput().size());
-                    int size = gripPipelineBlue.getFindContoursOutput().size();
-                    for (int i = 0 ; i < size ; i++) {
-                        MatOfPoint matOfPoint = gripPipelineBlue.getFindContoursOutput().get(i);
-                        telemetry.addData("index elem = %d",  i);
-                        telemetry.addData("size = %d",  matOfPoint.size());
-                        telemetry.addData( "elem Size = %d" , matOfPoint.elemSize());
-                        telemetry.addData("height = %d",  matOfPoint.height());
-                        telemetry.addData("width = %d",  matOfPoint.width());
-                        telemetry.addData("area = %f",  Imgproc.contourArea(gripPipelineBlue.getFindContoursOutput().get(i)));
-                    }
+                //input = gripPipelineBlue.process(input);
+                telemetry.addData("blue size is ", gripPipelineBlue.getFindContoursOutput().size());
+                int size = gripPipelineBlue.getFindContoursOutput().size();
+                for (int i = 0; i < size; i++) {
+                    MatOfPoint matOfPoint = gripPipelineBlue.getFindContoursOutput().get(i);
+                    telemetry.addData("index elem = %d", i);
+                    telemetry.addData("size = %d", matOfPoint.size());
+                    telemetry.addData("elem Size = %d", matOfPoint.elemSize());
+                    telemetry.addData("height = %d", matOfPoint.height());
+                    telemetry.addData("width = %d", matOfPoint.width());
+                    telemetry.addData("area = %f", Imgproc.contourArea(gripPipelineBlue.getFindContoursOutput().get(i)));
+                    telemetry.addLine("The cone is blue");
+                }
+            }
+            if (gripPipelineRed.getFindContoursOutput() != null) {
+                //if (!gripPipelineBlue.keyPoints.isEmpty()) {
+                //input = gripPipelineRed.process(input);
+                telemetry.addData("red size is ", gripPipelineRed.getFindContoursOutput().size());
+                int size = gripPipelineRed.getFindContoursOutput().size();
+                for (int i = 0; i < size; i++) {
+                    MatOfPoint matOfPoint = gripPipelineRed.getFindContoursOutput().get(i);
+                    telemetry.addData("index elem = %d", i);
+                    telemetry.addData("size = %d", matOfPoint.size());
+                    telemetry.addData("elem Size = %d", matOfPoint.elemSize());
+                    telemetry.addData("height = %d", matOfPoint.height());
+                    telemetry.addData("width = %d", matOfPoint.width());
+                    telemetry.addData("area = %f", Imgproc.contourArea(gripPipelineRed.getFindContoursOutput().get(i)));
+                    telemetry.addLine("The cone is red");
+                }
+            }
+            if (gripPipelineGreen.getFindContoursOutput() != null) {
+                //if (!gripPipelineBlue.keyPoints.isEmpty()) {
+                //input = gripPipelineGreen.process(input);
+                telemetry.addData("green size is ", gripPipelineGreen.getFindContoursOutput().size());
+                int size = gripPipelineGreen.getFindContoursOutput().size();
+                for (int i = 0; i < size; i++) {
+                    MatOfPoint matOfPoint = gripPipelineGreen.getFindContoursOutput().get(i);
+                    telemetry.addData("index elem = %d", i);
+                    telemetry.addData("size = %d", matOfPoint.size());
+                    telemetry.addData("elem Size = %d", matOfPoint.elemSize());
+                    telemetry.addData("height = %d", matOfPoint.height());
+                    telemetry.addData("width = %d", matOfPoint.width());
+                    telemetry.addData("area = %f", Imgproc.contourArea(gripPipelineGreen.getFindContoursOutput().get(i)));
+                    telemetry.addLine("The cone is green");
+                }
+            }
                     //telemetry.update();
                 //}
 
@@ -268,7 +320,8 @@ public class WebcamExample extends LinearOpMode
              * tapped, please see {@link PipelineStageSwitchingExample}
              */
 
-            return input;
+            telemetry.update();
+            return output;
         }
 
         @Override

@@ -11,6 +11,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.WebcamExample;
 import org.opencv.core.Mat;
+import org.opencv.core.MatOfPoint;
+import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
@@ -20,7 +22,7 @@ import org.openftc.easyopencv.OpenCvWebcam;
 import gripgreen.GripPipelineGreen;
 import gripred.GripPipelineRed;
 
-public class ImageProccessingOpenCV_Blue {
+public class ImageProccessingOpenCV {
 
     private OpenCvWebcam webcam;
     public boolean findColorObject = false;
@@ -28,8 +30,10 @@ public class ImageProccessingOpenCV_Blue {
     bluegrip.GripPipelineBlue gripPipelineBlue;
     gripred.GripPipelineRed gripPipelineRed;
     gripgreen.GripPipelineGreen gripPipelineGreen;
+    private LabelProcessing labelProcessing = null;
 
-    public enum LabelProcessingBlue {
+
+    public enum LabelProcessing {
         ONE, TWO, THREE
     }
 
@@ -114,10 +118,9 @@ public class ImageProccessingOpenCV_Blue {
         Log.d(TAG, "Finish Init");
     }
 
-    public LabelProcessingBlue FindLabelProcessingOpenCV()
+    public LabelProcessing FindLabelProcessingOpenCV()
     {
 
-        LabelProcessingBlue labelProcessing = null;
 
         Log.d(TAG, "Frame Count: " + Integer.toString(webcam.getFrameCount()));
         Log.d(TAG, "FPS: " + Float.toString(webcam.getFps()));
@@ -159,19 +162,79 @@ public class ImageProccessingOpenCV_Blue {
              * Draw a simple box around the middle 1/2 of the entire frame
              */
 
-            input = gripPipelineBlue.process(input);
+            Mat output;
+
+            output = gripPipelineBlue.process(input);
+            output = gripPipelineRed.process(input);
+            output = gripPipelineGreen.process(input);
 
             if (gripPipelineBlue.getFindContoursOutput() != null) {
-
                 gripPipelineBlue.getFindContoursOutput().size();
                 Log.d(TAG, "size is " +gripPipelineBlue.getFindContoursOutput().size());
                 if (gripPipelineBlue.getFindContoursOutput().size() == 1)
                 {
                     findColorObject = true;
+                    labelProcessing = LabelProcessing.THREE;
+                    Log.d(TAG, "findColorObject blue is true");
+                }
+                else if (gripPipelineBlue.getFindContoursOutput().size() > 1) {
+                    Log.d(TAG, "blue size is " + gripPipelineBlue.getFindContoursOutput().size());
+                    int size = gripPipelineBlue.getFindContoursOutput().size();
+                    for (int i = 0; i < size; i++) {
+                        Log.d(TAG, "blue area [" + i + "]= " + Imgproc.contourArea(gripPipelineBlue.getFindContoursOutput().get(i)));
+                    }
                 }
                 else
                 {
                     findColorObject = false;
+                    Log.d(TAG, "findColorObject blue is false");
+                }
+            }
+
+            if ((gripPipelineRed.getFindContoursOutput() != null) && (findColorObject == false)) {
+
+                gripPipelineRed.getFindContoursOutput().size();
+                Log.d(TAG, "size is " +gripPipelineRed.getFindContoursOutput().size());
+                if (gripPipelineRed.getFindContoursOutput().size() == 1)
+                {
+                    findColorObject = true;
+                    labelProcessing = LabelProcessing.ONE;
+                    Log.d(TAG, "findColorObject red is true");
+                }
+                else if (gripPipelineRed.getFindContoursOutput().size() > 1) {
+                    Log.d(TAG, "red size is " + gripPipelineRed.getFindContoursOutput().size());
+                    int size = gripPipelineRed.getFindContoursOutput().size();
+                    for (int i = 0; i < size; i++) {
+                        Log.d(TAG, "red area [" + i + "]= " + Imgproc.contourArea(gripPipelineRed.getFindContoursOutput().get(i)));
+                    }
+                }
+                else
+                {
+                    findColorObject = false;
+                    Log.d(TAG, "findColorObject red is false");
+                }
+            }
+            if ((gripPipelineGreen.getFindContoursOutput() != null) && (findColorObject == false)) {
+
+                gripPipelineGreen.getFindContoursOutput().size();
+                Log.d(TAG, "size is " +gripPipelineGreen.getFindContoursOutput().size());
+                if (gripPipelineGreen.getFindContoursOutput().size() == 1)
+                {
+                    findColorObject = true;
+                    labelProcessing = LabelProcessing.TWO;
+                    Log.d(TAG, "findColorObject green is true");
+                }
+                else if (gripPipelineGreen.getFindContoursOutput().size() > 1) {
+                    Log.d(TAG, "green size is " + gripPipelineGreen.getFindContoursOutput().size());
+                    int size = gripPipelineGreen.getFindContoursOutput().size();
+                    for (int i = 0; i < size; i++) {
+                        Log.d(TAG, "green area [" + i + "]= " + Imgproc.contourArea(gripPipelineGreen.getFindContoursOutput().get(i)));
+                    }
+                }
+                else
+                {
+                    findColorObject = false;
+                    Log.d(TAG, "findColorObject green is false");
                 }
             }
 
@@ -181,7 +244,7 @@ public class ImageProccessingOpenCV_Blue {
              * tapped, please see {@link PipelineStageSwitchingExample}
              */
 
-            return input;
+            return output;
         }
 
         @Override

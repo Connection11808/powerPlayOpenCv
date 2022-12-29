@@ -111,10 +111,10 @@ public class ConnectionTeleopPOV extends LinearOpMode {
             }
 
             if (gamepad2.dpad_down) {
-                robot.setCatchTheConeMotor(0.6);
+                robot.setCatchTheConeMotor(0.8);
                 Log.d(TAG, "The position is " + robot.catchTheCone.getPosition());
             } else if (gamepad2.dpad_up) {
-                robot.setCatchTheConeMotor(0.9);
+                robot.setCatchTheConeMotor(0.94);
                 Log.d(TAG, "The position is " + robot.catchTheCone.getPosition());
             }
         }
