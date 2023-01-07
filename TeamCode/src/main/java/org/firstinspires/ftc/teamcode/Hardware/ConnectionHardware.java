@@ -84,6 +84,7 @@ public class ConnectionHardware {
 
 
 
+
     private BNO055IMU imu;
 
     // Define a constructor that allows the OpMode to pass a reference to itself.
@@ -100,8 +101,8 @@ public class ConnectionHardware {
         left_backDrive = hardwareMapConnection.get(DcMotor.class, "LBD");
         right_frontDrive = hardwareMapConnection.get(DcMotor.class, "RFD");
         right_backDrive = hardwareMapConnection.get(DcMotor.class, "RBD");
-        elevatorMotor = hardwareMapConnection.get(DcMotor.class, "EM");
-        catchTheCone = hardwareMapConnection.get(Servo.class, "CTC");
+        //elevatorMotor = hardwareMapConnection.get(DcMotor.class, "EM");
+        //catchTheCone = hardwareMapConnection.get(Servo.class, "CTC");
 
 
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
@@ -111,17 +112,19 @@ public class ConnectionHardware {
         left_backDrive.setDirection(DcMotor.Direction.FORWARD);
         right_frontDrive.setDirection(DcMotor.Direction.REVERSE);
         right_backDrive.setDirection(DcMotor.Direction.REVERSE);
-        elevatorMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+        //elevatorMotor.setDirection(DcMotorSimple.Direction.FORWARD);
 
-        elevatorMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        elevatorMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        //elevatorMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        //elevatorMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         left_frontDrive.setPower(0);
         left_backDrive.setPower(0);
         right_frontDrive.setPower(0);
         right_backDrive.setPower(0);
-        elevatorMotor.setPower(0);
-        catchTheCone.setPosition(0.97);
+        //elevatorMotor.setPower(0);
+        //catchTheCone.setPosition(0.97);
+
+
 
 
         // If there are encoders connected, switch to RUN_USING_ENCODER mode for greater accuracy
@@ -140,8 +143,8 @@ public class ConnectionHardware {
 
     public void sideDrive(double speed){
         right_frontDrive.setPower(speed);
-        right_backDrive.setPower(-speed * 0.5);
-        left_frontDrive.setPower(-speed * 0.5);
+        right_backDrive.setPower(-speed);
+        left_frontDrive.setPower(-speed);
         left_backDrive.setPower(speed);
     }
 

@@ -41,7 +41,7 @@ public class ConnectionTeleopPOV extends LinearOpMode {
          */
         robot.init(hardwareMap);
 
-        robot.ElivatorMotorUsingEncoder();
+        //robot.ElivatorMotorUsingEncoder();
 
         // Send telemetry message to signify robot waiting;
         //telemetry.addData("Say", "Hello Driver");    //
@@ -51,11 +51,11 @@ public class ConnectionTeleopPOV extends LinearOpMode {
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
-        elevator.start();
+        //elevator.start();
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
-            Log.d(TAG, "Encoder position of ElivatorMotor is " + robot.getEncoderPositionElivatorMotor());
+            //Log.d(TAG, "Encoder position of ElivatorMotor is " + robot.getEncoderPositionElivatorMotor());
 
             if (gamepad1.right_bumper) {
                 robot.sideDrive(-1.0);
@@ -110,13 +110,14 @@ public class ConnectionTeleopPOV extends LinearOpMode {
                 maxSpeed = 0.8;
             }
 
-            if (gamepad2.dpad_down) {
+            /*if (gamepad2.dpad_down) {
                 robot.setCatchTheConeMotor(0.8);
                 Log.d(TAG, "The position is " + robot.catchTheCone.getPosition());
             } else if (gamepad2.dpad_up) {
                 robot.setCatchTheConeMotor(0.94);
                 Log.d(TAG, "The position is " + robot.catchTheCone.getPosition());
-            }
+            }*/
+            
         }
     }
 

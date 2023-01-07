@@ -1,4 +1,4 @@
-package gripgreen;
+package org.firstinspires.ftc.teamcode.openCV;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -40,6 +40,7 @@ public class GripPipelineGreen {
 	private Mat maskOutput = new Mat();
 	private MatOfKeyPoint findBlobsOutput = new MatOfKeyPoint();
 	private ArrayList<MatOfPoint> findContoursOutput = new ArrayList<MatOfPoint>();
+	public 	Mat hierarchy = new Mat();
 
 	//static {
 	//	System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
@@ -52,8 +53,8 @@ public class GripPipelineGreen {
 		// Step CV_resize0:
 		Mat cvResizeSrc = source0;
 		Size cvResizeDsize = new Size(0, 0);
-		double cvResizeFx = 0.25;
-		double cvResizeFy = 0.25;
+		double cvResizeFx = 1.0;
+		double cvResizeFy = 1.0;
 		int cvResizeInterpolation = Imgproc.INTER_LINEAR;
 		cvResize(cvResizeSrc, cvResizeDsize, cvResizeFx, cvResizeFy, cvResizeInterpolation, cvResizeOutput);
 
@@ -214,7 +215,7 @@ public class GripPipelineGreen {
 	private void findContours(Mat input, boolean externalOnly,
 							  List<MatOfPoint> contours) {
 
-		Mat hierarchy = new Mat();
+
 		contours.clear();
 		int mode;
 		if (externalOnly) {

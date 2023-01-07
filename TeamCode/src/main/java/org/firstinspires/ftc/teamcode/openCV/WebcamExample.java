@@ -19,12 +19,15 @@
  * SOFTWARE.
  */
 
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.openCV;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.openCV.GripPipelineBlue;
+import org.firstinspires.ftc.teamcode.openCV.GripPipelineGreen;
+import org.firstinspires.ftc.teamcode.openCV.GripPipelineRed;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
 import org.opencv.imgproc.Imgproc;
@@ -34,16 +37,14 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvPipeline;
 import org.openftc.easyopencv.OpenCvWebcam;
 
-import gripgreen.GripPipelineGreen;
-import gripred.GripPipelineRed;
 
 @TeleOp
 public class WebcamExample extends LinearOpMode
 {
     OpenCvWebcam webcam;
-    bluegrip.GripPipelineBlue gripPipelineBlue = new bluegrip.GripPipelineBlue();
-    gripred.GripPipelineRed gripPipelineRed = new gripred.GripPipelineRed();
-    gripgreen.GripPipelineGreen gripPipelineGreen = new gripgreen.GripPipelineGreen();
+    GripPipelineBlue gripPipelineBlue = new GripPipelineBlue();
+    GripPipelineRed gripPipelineRed = new GripPipelineRed();
+    GripPipelineGreen gripPipelineGreen = new GripPipelineGreen();
 
     @Override
     public void runOpMode()

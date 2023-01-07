@@ -44,7 +44,7 @@ public class ConnectionUnitTest extends LinearOpMode {
 
     ConnectionHardware connectionRobot = new ConnectionHardware();
     String TAG = "unittest";
-    private double MotorSpeed = 0.8;
+    private double MotorSpeed = 1.0;
 
     @Override
     public void runOpMode() {
@@ -156,7 +156,7 @@ public class ConnectionUnitTest extends LinearOpMode {
                 Log.d(TAG, "right_backDrive position is " + connectionRobot.getEncoderPositionRight_backDrive());
             }
 
-            if (gamepad1.right_trigger > 0.5)
+            /*if (gamepad1.right_trigger > 0.5)
             {
                 connectionRobot.setElivatorMotor(0.1);
                 Log.d(TAG, "Encoder position of ElivatorMotor is " + connectionRobot.getEncoderPositionElivatorMotor());
@@ -175,7 +175,7 @@ public class ConnectionUnitTest extends LinearOpMode {
             {
                 connectionRobot.resetEncoderElivatorMotor();
                 Log.d(TAG, "Encoder position of ElivatorMotor is " + connectionRobot.getEncoderPositionElivatorMotor());
-            }
+            }*/
 
 
 

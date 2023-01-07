@@ -1,4 +1,4 @@
-package bluegrip;
+package org.firstinspires.ftc.teamcode.openCV;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -39,6 +39,7 @@ public class GripPipelineBlue {
 	private Mat cvErodeOutput = new Mat();
 	private Mat maskOutput = new Mat();
 	private ArrayList<MatOfPoint> findContoursOutput = new ArrayList<MatOfPoint>();
+	public Mat hierarchy = new Mat();
 
 	//static {
 	//	System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
@@ -206,7 +207,6 @@ public class GripPipelineBlue {
 	 */
 	private void findContours(Mat input, boolean externalOnly,
 							  List<MatOfPoint> contours) {
-		Mat hierarchy = new Mat();
 		contours.clear();
 		int mode;
 		if (externalOnly) {

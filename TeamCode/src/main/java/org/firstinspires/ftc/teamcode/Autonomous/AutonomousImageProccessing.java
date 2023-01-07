@@ -14,9 +14,6 @@ import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
 import org.opencv.imgproc.Imgproc;
 
-import bluegrip.GripPipelineBlue;
-import gripgreen.GripPipelineGreen;
-import gripred.GripPipelineRed;
 
 @Autonomous(name="AutonomousImageProccessing", group="Robot")
 public class AutonomousImageProccessing extends LinearOpMode {
@@ -58,16 +55,21 @@ public class AutonomousImageProccessing extends LinearOpMode {
         telemetry.update();
 
         waitForStart();
-
-        while (labelProcessing == null) {
-
-            imageProccessingOpenCV.FindLabelProcessingOpenCV();
-
+        runtime.reset();
+        while ((labelProcessing == null) && (opModeIsActive()) && (runtime.seconds() <= 5)) {
             labelProcessing = imageProccessingOpenCV.FindLabelProcessingOpenCV();
-            Log.d(TAG, "labelProccessing is = " + labelProcessing);
-            telemetry.addData("labelProccessing is = ", labelProcessing);
+            Log.d(TAG, "Label Processing is = " + labelProcessing);
+            Log.d(TAG, "timer is = " + runtime.seconds());
+            if (labelProcessing != null) {
+                telemetry.addData("Label Processing is = ", labelProcessing);
+                telemetry.update();
+            }
+        }
+        if (labelProcessing == null)
+        {
+            labelProcessing = ImageProccessingOpenCV.LabelProcessing.ONE;
+            telemetry.addLine("Image Processing not found label; select ONE");
             telemetry.update();
-
         }
         while(opModeIsActive());
 
