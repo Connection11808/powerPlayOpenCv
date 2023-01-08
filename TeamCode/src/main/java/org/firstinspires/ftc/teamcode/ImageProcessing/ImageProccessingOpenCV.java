@@ -53,6 +53,7 @@ public class ImageProccessingOpenCV {
         gripPipelineRed = new GripPipelineRed();
         gripPipelineGreen = new GripPipelineGreen();
 
+
         /*
          * Instantiate an OpenCvCamera object for the camera we'll be using.
          * In this sample, we're using a webcam. Note that you will need to
@@ -192,7 +193,7 @@ public class ImageProccessingOpenCV {
                 }
 
 
-                if (maxAreaBlue > 900)
+                if (maxAreaBlue > 550)
                 {
                     findColorObject = true;
                     labelProcessing = LabelProcessing.THREE;
@@ -221,7 +222,7 @@ public class ImageProccessingOpenCV {
                     }
                 }
 
-                if (maxAreaRed > 900)
+                if (maxAreaRed > 850)
                 {
                     findColorObject = true;
                     labelProcessing = LabelProcessing.ONE;
@@ -249,7 +250,7 @@ public class ImageProccessingOpenCV {
                     }
                 }
 
-                if (maxAreaGreen > 900)
+                if (maxAreaGreen > 850)
                 {
                     findColorObject = true;
                     labelProcessing = LabelProcessing.TWO;

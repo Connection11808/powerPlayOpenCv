@@ -28,7 +28,7 @@ public class AutonomousImageProccessing extends LinearOpMode {
 
 
     static final double COUNTS_PER_MOTOR_REV = (134.4 * 4);  // PPR is 134.4 ; CPR = PPR * 4 for 1:20 Motor
-    static final double DRIVE_GEAR_REDUCTION = 1.0;     // No External Gearing.
+    static final double DRIVE_GEAR_REDUCTION = 1.0;      // No External Gearing.
     static final double WHEEL_DIAMETER_INCHES = 4.0;     // For figuring circumference
     static final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
             (WHEEL_DIAMETER_INCHES * 3.1415);
@@ -55,7 +55,7 @@ public class AutonomousImageProccessing extends LinearOpMode {
         telemetry.update();
 
         waitForStart();
-        runtime.reset();
+        /*runtime.reset();
         while ((labelProcessing == null) && (opModeIsActive()) && (runtime.seconds() <= 5)) {
             labelProcessing = imageProccessingOpenCV.FindLabelProcessingOpenCV();
             Log.d(TAG, "Label Processing is = " + labelProcessing);
@@ -71,18 +71,22 @@ public class AutonomousImageProccessing extends LinearOpMode {
             telemetry.addLine("Image Processing not found label; select ONE");
             telemetry.update();
         }
-        while(opModeIsActive());
+        while(opModeIsActive());*/
 
-        /*gyroDrive(0.5, 80, 0);
-        gyroTurn(0.4, -90);
-        gyroDrive(0.5, 145, -90);
-        gyroTurn(0.4, -180);
-        gyroDrive(0.5, 92, -180);
-        gyroTurn(0.4, -270);
-        gyroDrive(0.5, 142, -270);
-        gyroTurn(0.4, 0);
-        gyroTurn(0.4, 0);*/
+        /*gyroDrive(0.2, 80, 0);
+        gyroTurn(0.2, -90);
+        gyroDrive(0.2, 145, -90);
+        gyroTurn(0.2, -180);
+        gyroDrive(0.2, 92, -180);
+        gyroTurn(0.2, -270);
+        gyroDrive(0.2, 142, -270);
+        gyroTurn(0.2, 0);
+        gyroTurn(0.2, 0);*/
 
+        gyroDrive(0.3, 135, 0);
+        gyroTurn(0.2, -90);
+        gyroDrive(0.3, 135, -90);
+        gyroTurn(0.2, -180);
 
         /*if (labelProcessing == ImageProcessingConnection.LabelProcessing.BOLT)
         {
@@ -102,7 +106,7 @@ public class AutonomousImageProccessing extends LinearOpMode {
         else {
             Log.d(TAG, "It is " + labelProcessing);
             telemetry.addLine("It is Panel");
-            startDrive();
+            startDrive():
             sideDriveImageProcessing(labelProcessing);
 
         }*/
