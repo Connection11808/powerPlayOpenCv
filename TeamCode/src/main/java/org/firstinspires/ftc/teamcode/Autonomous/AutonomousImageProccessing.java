@@ -87,7 +87,11 @@ public class AutonomousImageProccessing extends LinearOpMode {
         gyroTurn(0.2, -90);
         gyroDrive(0.3, 135, -90);
         gyroTurn(0.2, -180);
-
+        gyroDrive(0.3, 135, -180);
+        gyroTurn(0.2, -270);
+        gyroDrive(0.3, 135, -270);
+        gyroTurn(0.2, 0);
+        gyroTurn(0.2, 0);
         /*if (labelProcessing == ImageProcessingConnection.LabelProcessing.BOLT)
         {
             Log.d(TAG, "It is " + labelProcessing);

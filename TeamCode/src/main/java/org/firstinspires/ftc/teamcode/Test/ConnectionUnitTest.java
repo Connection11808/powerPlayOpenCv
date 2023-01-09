@@ -156,27 +156,24 @@ public class ConnectionUnitTest extends LinearOpMode {
                 Log.d(TAG, "right_backDrive position is " + connectionRobot.getEncoderPositionRight_backDrive());
             }
 
-            /*if (gamepad1.right_trigger > 0.5)
+            if (gamepad2.a)
             {
-                connectionRobot.setElivatorMotor(0.1);
+                connectionRobot.setElivatorMotor(0.6);
                 Log.d(TAG, "Encoder position of ElivatorMotor is " + connectionRobot.getEncoderPositionElivatorMotor());
             }
-            else if (gamepad1.left_trigger > 0.5)
+            else if (gamepad2.y)
             {
-                connectionRobot.setElivatorMotor(-0.1);
+                connectionRobot.setElivatorMotor(-0.6);
                 Log.d(TAG, "Encoder position of ElivatorMotor is " + connectionRobot.getEncoderPositionElivatorMotor());
 
             }
             else {
                 connectionRobot.setElivatorMotor(0);
-                //robot.ElivatorMotorUsingBrake();
             }
-            if (gamepad1.dpad_left == true)
-            {
+            if (gamepad1.dpad_left == true) {
                 connectionRobot.resetEncoderElivatorMotor();
                 Log.d(TAG, "Encoder position of ElivatorMotor is " + connectionRobot.getEncoderPositionElivatorMotor());
-            }*/
-
+            }
 
 
 

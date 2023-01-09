@@ -101,7 +101,7 @@ public class ConnectionHardware {
         left_backDrive = hardwareMapConnection.get(DcMotor.class, "LBD");
         right_frontDrive = hardwareMapConnection.get(DcMotor.class, "RFD");
         right_backDrive = hardwareMapConnection.get(DcMotor.class, "RBD");
-        //elevatorMotor = hardwareMapConnection.get(DcMotor.class, "EM");
+        elevatorMotor = hardwareMapConnection.get(DcMotor.class, "EM");
         //catchTheCone = hardwareMapConnection.get(Servo.class, "CTC");
 
 
@@ -112,16 +112,16 @@ public class ConnectionHardware {
         left_backDrive.setDirection(DcMotor.Direction.FORWARD);
         right_frontDrive.setDirection(DcMotor.Direction.REVERSE);
         right_backDrive.setDirection(DcMotor.Direction.REVERSE);
-        //elevatorMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+        elevatorMotor.setDirection(DcMotorSimple.Direction.FORWARD);
 
-        //elevatorMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        //elevatorMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        elevatorMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        elevatorMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         left_frontDrive.setPower(0);
         left_backDrive.setPower(0);
         right_frontDrive.setPower(0);
         right_backDrive.setPower(0);
-        //elevatorMotor.setPower(0);
+        elevatorMotor.setPower(0);
         //catchTheCone.setPosition(0.97);
 
 
@@ -177,7 +177,6 @@ public class ConnectionHardware {
     {
         double inch = cm * 0.393701;
         return(inch);
-
     }
 
 

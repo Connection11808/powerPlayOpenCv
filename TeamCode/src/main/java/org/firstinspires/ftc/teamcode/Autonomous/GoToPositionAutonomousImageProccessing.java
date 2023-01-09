@@ -23,7 +23,7 @@ public class GoToPositionAutonomousImageProccessing extends LinearOpMode {
 
 
     static final double COUNTS_PER_MOTOR_REV = (134.4 * 4);  // PPR is 134.4 ; CPR = PPR * 4 for 1:20 Motor
-    static final double DRIVE_GEAR_REDUCTION = 1.0;     // No External Gearing.
+    static final double DRIVE_GEAR_REDUCTION = (16.0/18.0);     // No External Gearing.
     static final double WHEEL_DIAMETER_INCHES = 4.0;     // For figuring circumference
     static final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
             (WHEEL_DIAMETER_INCHES * 3.1415);
@@ -50,7 +50,7 @@ public class GoToPositionAutonomousImageProccessing extends LinearOpMode {
 
         waitForStart();
 
-        while (labelProcessing == null) {
+        /*while (labelProcessing == null) {
 
             imageProccessingOpenCV.FindLabelProcessingOpenCV();
 
@@ -60,15 +60,46 @@ public class GoToPositionAutonomousImageProccessing extends LinearOpMode {
             telemetry.update();
 
         }
-        while (opModeIsActive()) ;
+        while (opModeIsActive()) ;*/
 
-        /*gyroDrive(0.5, 80, 0);
-        gyroTurn(0.4, -90);
-        gyroDrive(0.5, 145, -90);
-        gyroTurn(0.4, -180);
-        gyroDrive(0.5, 92, -180);
-        gyroTurn(0.4, -270);
-        gyroDrive(0.5, 142, -270);
+        gyroDrive(0.4, 140, 0);
+        sleep(500);
+        gyroTurn(0.3, -90);
+        sleep(500);
+        gyroDrive(0.4, 55, -90);
+        sleep(500);
+        gyroTurn(0.3, -180);
+        sleep(500);
+        gyroDrive(0.4, 140, -180);
+        sleep(500);
+        gyroTurn(0.3, -270);
+        sleep(500);
+        gyroDrive(0.4, 55, -270);
+        gyroTurn(0.3, 0);
+        gyroTurn(0.3, 0);
+        /*gyroTurn(0.3, -90);
+        gy+roDrive(0.4, 70, -90);
+        gyroTurn(0.3, -180);
+        gyroDrive(0.4, 160, -180);
+        gyroTurn(0.3, -270);
+        gyroDrive(0.4, 70, -270);
+        gyroTurn(0.3, 0);
+        gyroTurn(0.3, 0);*/
+        /*gyroTurn(0.3, -90);
+        gyroDrive(0.4, 45, -90);
+        gyroTurn(0.3, -180);
+        gyroDrive(0.4, 194, -180);
+        gyroTurn(0.3, -270);
+        gyroDrive(0.4, 45, -270);
+        gyroTurn(0.3, 0);
+        gyroTurn(0.3, 0);*/
+
+        /*gyroTurn(0.3, -90);
+        gyroDrive(0.4, 50, -90);
+        gyroTurn(0.3, -180);
+        gyroDrive(0.4, 100, -180);
+        gyroTurn(0.3, -270);
+        gyroDrive(0.5, 50, -270);
         gyroTurn(0.4, 0);
         gyroTurn(0.4, 0);*/
 
@@ -237,10 +268,10 @@ public class GoToPositionAutonomousImageProccessing extends LinearOpMode {
             robot.Left_backDriveSetTargetPosition(newLeftBTarget);
             robot.Right_backDriveSetTargetPosition(newRightBTarget);
 
-            robot.Left_frontDriveUsingEncoder();
-            robot.Right_frontDriveUsingEncoder();
-            robot.Left_backDriveUsingEncoder();
-            robot.Right_backDriveUsingEncoder();
+            //robot.Left_frontDriveUsingEncoder();
+            //robot.Right_frontDriveUsingEncoder();
+            //robot.Left_backDriveUsingEncoder();
+            //robot.Right_backDriveUsingEncoder();
 
             // start motion.
             speed = Range.clip(Math.abs(speed), 0.0, 1.0);
@@ -261,8 +292,8 @@ public class GoToPositionAutonomousImageProccessing extends LinearOpMode {
 
             // keep looping while we are still active, and BOTH motors are running.
             while (opModeIsActive() &&
-                    (robot.Left_frontDriveIsBusy() && robot.Right_frontDriveIsBusy() && robot.Left_backDriveIsBusy() && robot.Right_backDriveIsBusy())) {
-                /*(rangLeftDriveF > 150) && (rangRightDriveF > 150) && (rangLeftDriveB > 150) && (rangRightDriveB > 150))*/
+                    //(robot.Left_frontDriveIsBusy() && robot.Right_frontDriveIsBusy() && robot.Left_backDriveIsBusy() && robot.Right_backDriveIsBusy())) {
+                (rangLeftDriveF > 150) && (rangRightDriveF > 150) && (rangLeftDriveB > 150) && (rangRightDriveB > 150))
                 {
 
                     // adjust relative speed based on heading error.
@@ -328,7 +359,7 @@ public class GoToPositionAutonomousImageProccessing extends LinearOpMode {
                 robot.Right_backDriveUsingEncoder();
             }
         }
-    }
+
     public void sideDriveAutonomous (double speed)
     {
         robot.sideDrive(speed);
