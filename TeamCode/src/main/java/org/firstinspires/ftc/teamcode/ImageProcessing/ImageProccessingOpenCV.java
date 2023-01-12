@@ -176,7 +176,7 @@ public class ImageProccessingOpenCV {
             output = gripPipelineGreen.process(input);
 
             Mat draw = Mat.zeros(input.size(), CvType.CV_8UC3);
-            if (gripPipelineBlue.getFindContoursOutput() != null) {
+            if ((gripPipelineBlue.getFindContoursOutput() != null) && (!findColorObject)) {
                 int blueSize = gripPipelineBlue.getFindContoursOutput().size();
                 Log.d(TAG, "Blue size is " + blueSize);
 
@@ -193,7 +193,7 @@ public class ImageProccessingOpenCV {
                 }
 
 
-                if (maxAreaBlue > 550)
+                if (maxAreaBlue > 200)
                 {
                     findColorObject = true;
                     labelProcessing = LabelProcessing.THREE;
@@ -206,7 +206,7 @@ public class ImageProccessingOpenCV {
                 }
             }
 
-            if ((gripPipelineRed.getFindContoursOutput() != null) && (findColorObject == false)) {
+            if ((gripPipelineRed.getFindContoursOutput() != null) && (!findColorObject)) {
                 int redSize = gripPipelineRed.getFindContoursOutput().size();
                 Log.d(TAG, "Red size is " + redSize);
 
@@ -234,7 +234,7 @@ public class ImageProccessingOpenCV {
                     Log.d(TAG, "findColorObject red is false");
                 }
             }
-            if ((gripPipelineGreen.getFindContoursOutput() != null) && (findColorObject == false)) {
+            if ((gripPipelineGreen.getFindContoursOutput() != null) && (!findColorObject)) {
                 int greenSize = gripPipelineGreen.getFindContoursOutput().size();
                 Log.d(TAG, "Green size is " +gripPipelineGreen.getFindContoursOutput().size());
 

@@ -9,10 +9,9 @@ import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.Hardware.ConnectionHardware;
 import org.firstinspires.ftc.teamcode.ImageProcessing.ImageProccessingOpenCV;
-import org.firstinspires.ftc.teamcode.ImageProcessing.ImageProcessingConnection;
 
-@Autonomous(name="GoToPositionAutonomousImageProccessing", group="Robot")
-public class GoToPositionAutonomousImageProccessing extends LinearOpMode {
+@Autonomous(name="NewGoToPositionAutonomousImageProccessing", group="Robot")
+public class GoToPositionAutonomousImageProccessingGuy extends LinearOpMode {
 
 
     ConnectionHardware robot = new ConnectionHardware();
@@ -87,23 +86,41 @@ public class GoToPositionAutonomousImageProccessing extends LinearOpMode {
         {
             Log.d(TAG, "It is " + labelProcessing);
             telemetry.addLine("It is ONE");
-            startDrive();
-            sideDriveImageProcessing(labelProcessing);
+            gyroTurn(0.4, 90);
+            sleep(500);
+            gyroDrive(0.6, 40, 90);
+            sleep(500);
+            gyroTurn(0.4, 0);
+            sleep(500);
+            gyroDrive(0.6, 50, 0);
+            sleep(500);
 
         }
         else if (labelProcessing == ImageProccessingOpenCV.LabelProcessing.TWO)
         {
             Log.d(TAG, "It is " + labelProcessing);
             telemetry.addLine("It is TWO");
-            startDrive();
-            sideDriveImageProcessing(labelProcessing);
+            gyroTurn(0.4, 90);
+            sleep(500);
+            gyroDrive(0.6, 12, 90);
+            sleep(500);
+            gyroTurn(0.4, 0);
+            sleep(500);
+            gyroDrive(0.6, 50, 0);
+            sleep(500);
 
         }
         else {
             Log.d(TAG, "It is " + labelProcessing);
             telemetry.addLine("It is THREE");
-            startDrive();
-            sideDriveImageProcessing(labelProcessing);
+            gyroTurn(0.4, -90);
+            sleep(500);
+            gyroDrive(0.6, 30, -90);
+            sleep(500);
+            gyroTurn(0.4, 0);
+            sleep(500);
+            gyroDrive(0.6, 50, 0);
+            sleep(500);
 
         }
 

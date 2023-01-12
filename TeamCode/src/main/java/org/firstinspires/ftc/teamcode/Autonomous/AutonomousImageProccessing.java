@@ -55,7 +55,7 @@ public class AutonomousImageProccessing extends LinearOpMode {
         telemetry.update();
 
         waitForStart();
-        /*runtime.reset();
+        runtime.reset();
         while ((labelProcessing == null) && (opModeIsActive()) && (runtime.seconds() <= 5)) {
             labelProcessing = imageProccessingOpenCV.FindLabelProcessingOpenCV();
             Log.d(TAG, "Label Processing is = " + labelProcessing);
@@ -71,7 +71,7 @@ public class AutonomousImageProccessing extends LinearOpMode {
             telemetry.addLine("Image Processing not found label; select ONE");
             telemetry.update();
         }
-        while(opModeIsActive());*/
+        while(opModeIsActive());
 
         /*gyroDrive(0.2, 80, 0);
         gyroTurn(0.2, -90);
