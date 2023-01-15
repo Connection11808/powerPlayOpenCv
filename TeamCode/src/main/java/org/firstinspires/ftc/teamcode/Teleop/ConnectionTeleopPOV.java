@@ -112,7 +112,7 @@ public class ConnectionTeleopPOV extends LinearOpMode {
             }
 
             if (gamepad2.dpad_down) {
-                robot.setCatchTheConeMotor(0.7);
+                robot.setCatchTheConeMotor(0.6);
                 Log.d(TAG, "The position of catchTheCone is " + robot.catchTheCone.getPosition());
             } else if (gamepad2.dpad_up) {
                 robot.setCatchTheConeMotor(1.0);
@@ -129,10 +129,10 @@ public class ConnectionTeleopPOV extends LinearOpMode {
                 Log.d(TAG, "The position of catchTheCone is " + robot.catchTheCone.getPosition());
             }
 
-            if (gamepad2.a) {
+            if (gamepad2.y) {
                 robot.setElivatorMotor(1.0);
                 Log.d(TAG, "Elevator speed is " + elivatorSpeed);
-            } else if (gamepad2.y) {
+            } else if (gamepad2.a) {
                 robot.setElivatorMotor(-1.0);
                 Log.d(TAG, "Elevator speed is " + elivatorSpeed);
 
