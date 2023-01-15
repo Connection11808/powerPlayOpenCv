@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.Autonomous;
 import android.util.Log;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
@@ -16,6 +17,7 @@ import org.opencv.imgproc.Imgproc;
 
 
 @Autonomous(name="AutonomousImageProccessing", group="Robot")
+@Disabled
 public class AutonomousImageProccessing extends LinearOpMode {
 
 

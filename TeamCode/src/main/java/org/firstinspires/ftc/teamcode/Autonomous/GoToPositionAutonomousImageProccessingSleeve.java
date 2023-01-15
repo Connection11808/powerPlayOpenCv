@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.Hardware.ConnectionHardware;
 import org.firstinspires.ftc.teamcode.ImageProcessing.ImageProccessingOpenCV;
 
 @Autonomous(name="NewGoToPositionAutonomousImageProccessing", group="Robot")
-public class GoToPositionAutonomousImageProccessingGuy extends LinearOpMode {
+public class GoToPositionAutonomousImageProccessingSleeve extends LinearOpMode {
 
 
     ConnectionHardware robot = new ConnectionHardware();
@@ -86,6 +86,29 @@ public class GoToPositionAutonomousImageProccessingGuy extends LinearOpMode {
         {
             Log.d(TAG, "It is " + labelProcessing);
             telemetry.addLine("It is ONE");
+            driveToTheSleeveParking();
+
+        }
+        else if (labelProcessing == ImageProccessingOpenCV.LabelProcessing.TWO)
+        {
+            Log.d(TAG, "It is " + labelProcessing);
+            telemetry.addLine("It is TWO");
+            driveToTheSleeveParking();
+
+        }
+        else {
+            Log.d(TAG, "It is " + labelProcessing);
+            telemetry.addLine("It is THREE");
+            driveToTheSleeveParking();
+
+        }
+
+        while(opModeIsActive());
+    }
+
+    public void driveToTheSleeveParking() {
+        if (labelProcessing == ImageProccessingOpenCV.LabelProcessing.ONE)
+        {
             gyroTurn(0.4, 90);
             sleep(500);
             gyroDrive(0.6, 40, 90);
@@ -98,8 +121,7 @@ public class GoToPositionAutonomousImageProccessingGuy extends LinearOpMode {
         }
         else if (labelProcessing == ImageProccessingOpenCV.LabelProcessing.TWO)
         {
-            Log.d(TAG, "It is " + labelProcessing);
-            telemetry.addLine("It is TWO");
+
             gyroTurn(0.4, 90);
             sleep(500);
             gyroDrive(0.6, 12, 90);
@@ -108,11 +130,8 @@ public class GoToPositionAutonomousImageProccessingGuy extends LinearOpMode {
             sleep(500);
             gyroDrive(0.6, 50, 0);
             sleep(500);
-
         }
         else {
-            Log.d(TAG, "It is " + labelProcessing);
-            telemetry.addLine("It is THREE");
             gyroTurn(0.4, -90);
             sleep(500);
             gyroDrive(0.6, 30, -90);
@@ -123,19 +142,6 @@ public class GoToPositionAutonomousImageProccessingGuy extends LinearOpMode {
             sleep(500);
 
         }
-
-        while(opModeIsActive());
-    }
-
-    public void startDrive() {
-        gyroTurn(0.4, 90);
-        sleep(500);
-        gyroDrive(0.6, 40, 90);
-        sleep(500);
-        gyroTurn(0.4, 0);
-        sleep(500);
-        gyroDrive(0.6, 50, 0);
-        sleep(500);
     }
 
     public void sideDriveImageProcessing(ImageProccessingOpenCV.LabelProcessing _labelProcessing) {

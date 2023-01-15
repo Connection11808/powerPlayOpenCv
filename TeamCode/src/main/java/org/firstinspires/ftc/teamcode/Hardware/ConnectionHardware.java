@@ -81,6 +81,8 @@ public class ConnectionHardware {
     public DcMotor right_backDrive = null;
     public DcMotor elevatorMotor = null;
     public Servo catchTheCone = null;
+    public Servo tuningClaw = null;
+    public Servo tuningArmClaw = null;
 
 
 
@@ -102,7 +104,9 @@ public class ConnectionHardware {
         right_frontDrive = hardwareMapConnection.get(DcMotor.class, "RFD");
         right_backDrive = hardwareMapConnection.get(DcMotor.class, "RBD");
         elevatorMotor = hardwareMapConnection.get(DcMotor.class, "EM");
-        //catchTheCone = hardwareMapConnection.get(Servo.class, "CTC");
+        catchTheCone = hardwareMapConnection.get(Servo.class, "CTC");
+        tuningClaw = hardwareMapConnection.get(Servo.class, "TC");
+        tuningArmClaw = hardwareMapConnection.get(Servo.class, "TAC");
 
 
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
@@ -122,7 +126,9 @@ public class ConnectionHardware {
         right_frontDrive.setPower(0);
         right_backDrive.setPower(0);
         elevatorMotor.setPower(0);
-        //catchTheCone.setPosition(0.97);
+        catchTheCone.setPosition(1.0);
+        tuningClaw.setPosition(1.0);
+        tuningArmClaw.setPosition(0.65);
 
 
 
@@ -199,6 +205,14 @@ public class ConnectionHardware {
     public void setCatchTheConeMotor (double position)
     {
         catchTheCone.setPosition(position);
+    }
+    public void setTuningClawMotor (double position)
+    {
+        tuningClaw.setPosition(position);
+    }
+    public void setTuningArmClawMotor (double position)
+    {
+        tuningArmClaw.setPosition(position);
     }
     public int getEncoderPositionLeft_frontDrive ()
     {

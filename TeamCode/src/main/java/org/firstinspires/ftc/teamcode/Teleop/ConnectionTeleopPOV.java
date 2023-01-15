@@ -19,7 +19,7 @@ public class ConnectionTeleopPOV extends LinearOpMode {
     final double CLAW_SPEED = 0.02;// sets rate to move servo
     public String TAG = "teleop";
     double maxSpeed = 0.6;
-    private Elevator elevator = new Elevator();
+    //private Elevator elevator = new Elevator();
 
     @Override
     public void runOpMode() {
@@ -32,6 +32,7 @@ public class ConnectionTeleopPOV extends LinearOpMode {
         boolean collectionMotorStart = false;
         int armPosition;
         boolean armMotor_run_to_position = false;
+        float elivatorSpeed = 0.85f;
 
 
 
@@ -110,24 +111,51 @@ public class ConnectionTeleopPOV extends LinearOpMode {
                 maxSpeed = 0.8;
             }
 
-            /*if (gamepad2.dpad_down) {
-                robot.setCatchTheConeMotor(0.8);
-                Log.d(TAG, "The position is " + robot.catchTheCone.getPosition());
+            if (gamepad2.dpad_down) {
+                robot.setCatchTheConeMotor(0.7);
+                Log.d(TAG, "The position of catchTheCone is " + robot.catchTheCone.getPosition());
             } else if (gamepad2.dpad_up) {
-                robot.setCatchTheConeMotor(0.94);
-                Log.d(TAG, "The position is " + robot.catchTheCone.getPosition());
-            }*/
-            
+                robot.setCatchTheConeMotor(1.0);
+                Log.d(TAG, "The position of catchTheCone is " + robot.catchTheCone.getPosition());
+            }
+
+            if (gamepad2.dpad_left) {
+                robot.setTuningClawMotor(0.2);
+                robot.setTuningArmClawMotor(0.05);
+                Log.d(TAG, "The position of catchTheCone is " + robot.catchTheCone.getPosition());
+            } else if (gamepad2.dpad_right) {
+                robot.setTuningClawMotor(1.0);
+                robot.setTuningArmClawMotor(0.65);
+                Log.d(TAG, "The position of catchTheCone is " + robot.catchTheCone.getPosition());
+            }
+
+            if (gamepad2.a) {
+                robot.setElivatorMotor(1.0);
+                Log.d(TAG, "Elevator speed is " + elivatorSpeed);
+            } else if (gamepad2.y) {
+                robot.setElivatorMotor(-1.0);
+                Log.d(TAG, "Elevator speed is " + elivatorSpeed);
+
+            } else {
+            robot.setElivatorMotor(0);
         }
+
+
+        }
+
     }
 
-    private class Elevator extends Thread {
-        Elevator() {this.setName("Elevator");}
-        float elivatorSpeed = 0.55f;
+
+    /*private class Elevator extends Thread {
+        Elevator() {
+            this.setName("Elevator");
+        }
+
+        float elivatorSpeed = 0.85f;
         boolean stopFlag = false;
         private ElapsedTime runtime = new ElapsedTime();
-        public void run()
-        {
+
+        public void run() {
             try {
                 Log.d(TAG, " Elevator thread is starting");
 
@@ -135,12 +163,16 @@ public class ConnectionTeleopPOV extends LinearOpMode {
 
                     if (gamepad2.y) {
                         stopFlag = false;
-                        robot.ElivatorMotorSetTargetPosition(4140);
+                        robot.ElivatorMotorSetTargetPosition(1958);
+                        Log.d(TAG, "ElivatorMotorSetTargetPosition = " + robot.getEncoderPositionElivatorMotor());
                         robot.ElivatorMotorToPosition();
+                        Log.d(TAG, "ElivatorMotor is GoToPosition");
                         robot.setElivatorMotor(elivatorSpeed);
+                        Log.d(TAG, "ElivatorMotor get power = " + elivatorSpeed);
                         runtime.reset();
+                        Log.d(TAG, "runtime reset");
                         while ((robot.ElivatorMotorIsBusy()) && (opModeIsActive()) && (runtime.seconds() < 6) && (gamepad2.left_bumper == false)) {
-                          Log.d(TAG , "Encoder position of ElivatorMotor is " + robot.getEncoderPositionElivatorMotor());
+                            Log.d(TAG, "Encoder position of ElivatorMotor is " + robot.getEncoderPositionElivatorMotor());
                         }
                         robot.setElivatorMotor(0);
                         Log.d(TAG, "Encoder position up " + robot.getEncoderPositionElivatorMotor());
@@ -158,8 +190,7 @@ public class ConnectionTeleopPOV extends LinearOpMode {
                         Log.d(TAG, "Encoder position down " + robot.getEncoderPositionElivatorMotor());
                         Log.d(TAG, "Time elevator is " + runtime.seconds());
 
-                    }
-                    else if (gamepad2.x) {
+                    } else if (gamepad2.x) {
                         stopFlag = false;
                         robot.ElivatorMotorSetTargetPosition(300);
                         robot.ElivatorMotorToPosition();
@@ -172,10 +203,9 @@ public class ConnectionTeleopPOV extends LinearOpMode {
                         Log.d(TAG, "Encoder position down " + robot.getEncoderPositionElivatorMotor());
                         Log.d(TAG, "Time elevator is " + runtime.seconds());
 
-                    }
-                    else if (gamepad2.b) {
+                    } else if (gamepad2.b) {
                         stopFlag = false;
-                        robot.ElivatorMotorSetTargetPosition(3000);
+                        robot.ElivatorMotorSetTargetPosition(1140);
                         robot.ElivatorMotorToPosition();
                         robot.setElivatorMotor(elivatorSpeed);
                         runtime.reset();
@@ -186,10 +216,9 @@ public class ConnectionTeleopPOV extends LinearOpMode {
                         Log.d(TAG, "Encoder position down " + robot.getEncoderPositionElivatorMotor());
                         Log.d(TAG, "Time elevator is " + runtime.seconds());
 
-                    }
-                    else if (gamepad2.right_bumper) {
+                    } else if (gamepad2.right_bumper) {
                         stopFlag = false;
-                        robot.ElivatorMotorSetTargetPosition(1800);
+                        robot.ElivatorMotorSetTargetPosition(-875);
                         robot.ElivatorMotorToPosition();
                         robot.setElivatorMotor(elivatorSpeed);
                         runtime.reset();
@@ -200,49 +229,40 @@ public class ConnectionTeleopPOV extends LinearOpMode {
                         Log.d(TAG, "Encoder position down " + robot.getEncoderPositionElivatorMotor());
                         Log.d(TAG, "Time elevator is " + runtime.seconds());
 
-                    }
-                    else {
-                        if (gamepad2.right_trigger > 0.3) {
+                    } else {
+                        if (gamepad2.right_stick_y > 0.3) {
                             stopFlag = false;
-                            robot.setElivatorMotor(elivatorSpeed);
+                            robot.setElivatorMotor(1.0);
                             Log.d(TAG, "Elevator speed is " + elivatorSpeed);
-                        }
-                        else if (gamepad2.left_trigger > 0.3) {
+                        } else if (gamepad2.right_stick_y < 0.3) {
                             stopFlag = false;
-                            robot.setElivatorMotor(-elivatorSpeed);
+                            robot.setElivatorMotor(-1.0);
                             Log.d(TAG, "Elevator speed is " + elivatorSpeed);
 
-                        }
-                        else if (gamepad2.dpad_left)
-                        {
+                        } else if (gamepad2.dpad_left) {
                             robot.resetEncoderElivatorMotor();
                             Log.d(TAG, "Elevator position is " + robot.getEncoderPositionElivatorMotor());
-                        }
-                        else {
+                        } else {
                             robot.setElivatorMotor(0);
                             if (stopFlag == false) {
                                 Log.d(TAG, "Elevator speed is 0");
                                 stopFlag = true;
                             }
                         }
+                    }
+                    Log.d(TAG, " Elevat
                         robot.setElivatorMotor(-0.1);
                         robot.ElivatorMotorUsingBrake();
-                    }
-                }
-                Log.d(TAG, " Elevator thread is finished");
-            }
-            catch (Exception e)
-            {
+                    }or thread is finished");
+            } catch (Exception e) {
                 Log.d(TAG, "Elevator thread exception: " + e.getMessage());
             }
         }
 
 
+    }*/
+}
 
-
-        }
-
-    }
 
 
 

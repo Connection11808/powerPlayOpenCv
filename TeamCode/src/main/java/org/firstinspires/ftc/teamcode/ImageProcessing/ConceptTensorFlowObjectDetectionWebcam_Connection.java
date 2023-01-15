@@ -53,6 +53,7 @@ import java.util.List;
  * is explained below.
  */
 @Autonomous(name = "Concept: TensorFlow Object Detection Webcam_Connection", group = "Concept")
+@Disabled
 public class ConceptTensorFlowObjectDetectionWebcam_Connection extends LinearOpMode {
 
     /* Specify the source for the Tensor Flow Model.

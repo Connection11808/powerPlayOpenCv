@@ -35,6 +35,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Hardware.ConnectionHardware;
 
@@ -45,6 +46,11 @@ public class ConnectionUnitTest extends LinearOpMode {
     ConnectionHardware connectionRobot = new ConnectionHardware();
     String TAG = "unittest";
     private double MotorSpeed = 1.0;
+
+    double positionServo = 0.0;
+    double AddGrip = 0.05;
+    boolean pres = false;
+    private ElapsedTime runtime = new ElapsedTime();
 
     @Override
     public void runOpMode() {
@@ -64,6 +70,7 @@ public class ConnectionUnitTest extends LinearOpMode {
         // while the op mode is active, loop and read the light levels.
         // Note we use opModeIsActive() as our loop condition because it is an interruptible method.
         while (opModeIsActive()) {
+
 
             if (gamepad1.dpad_up == true)
             {
@@ -176,7 +183,59 @@ public class ConnectionUnitTest extends LinearOpMode {
             }
 
 
+            if (gamepad2.x) {
+                connectionRobot.ElivatorMotorSetTargetPosition(1958);
+                Log.d(TAG, "ElivatorMotorSetTargetPosition = " + connectionRobot.getEncoderPositionElivatorMotor());
+                connectionRobot.ElivatorMotorToPosition();
+                Log.d(TAG, "ElivatorMotor is GoToPosition");
+                connectionRobot.setElivatorMotor(0.7);
+                Log.d(TAG, "ElivatorMotor get power = " + 0.7);
+                runtime.reset();
+                Log.d(TAG, "runtime reset");
+                while ((connectionRobot.ElivatorMotorIsBusy()) && (opModeIsActive()) && (runtime.seconds() < 6) && (gamepad2.left_bumper == false)) {
+                    Log.d(TAG, "Encoder position of ElivatorMotor is " + connectionRobot.getEncoderPositionElivatorMotor());
+                }
+                connectionRobot.setElivatorMotor(0);
+                Log.d(TAG, "Encoder position up " + connectionRobot.getEncoderPositionElivatorMotor());
+                Log.d(TAG, "Time elevator is " + runtime.seconds());
+            }
+            //if (gamepad2.dpad_down) {
+            //    connectionRobot.setCatchTheConeMotor(0);
+            //    Log.d(TAG, "The position of catchTheCone is " + connectionRobot.catchTheCone.getPosition());
+            //} else if (gamepad2.dpad_up) {
+            //    connectionRobot.setCatchTheConeMotor(0.9);
+            //    Log.d(TAG, "The position of catchTheCone is " + connectionRobot.catchTheCone.getPosition());
+            //}
+            if ((true == gamepad2.dpad_right) && (pres == false)) {
+                positionServo = positionServo + AddGrip;
+                pres = true;
+                telemetry.addLine("depad_right is pressed");
 
+                if (positionServo > 1.0) {
+                    positionServo = 1.0;
+                    telemetry.addLine("possition = 1.0");
+
+                }
+                telemetry.addData("servo position is", positionServo);
+                connectionRobot.tuningArmClaw.setPosition(positionServo);
+            } else if ((true == gamepad2.dpad_left) && (false == pres)) {
+                positionServo = positionServo - AddGrip;
+                pres = true;
+                telemetry.addLine("depad_left is pressed");
+                if (positionServo < 0.0) {
+                    positionServo = 0.0;
+                    telemetry.addLine("possition = 0.0");
+                }
+                telemetry.addData("servo position is", positionServo);
+                connectionRobot.tuningArmClaw.setPosition(positionServo);
+            } else {
+                if ((false == gamepad2.dpad_left) && (false == gamepad2.dpad_right)) {
+                    pres = false;
+                    telemetry.addLine("nothing is pressed");
+                }
+            }
+            telemetry.addData("claw position", connectionRobot.tuningArmClaw.getPosition());
+            telemetry.update();
 
         }
     }
