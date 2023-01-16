@@ -127,8 +127,8 @@ public class ConnectionHardware {
         right_backDrive.setPower(0);
         elevatorMotor.setPower(0);
         catchTheCone.setPosition(1.0);
-        tuningClaw.setPosition(1.0);
-        tuningArmClaw.setPosition(0.65);
+        tuningClaw.setPosition(0.95);
+        tuningArmClaw.setPosition(0.70);
 
 
 
