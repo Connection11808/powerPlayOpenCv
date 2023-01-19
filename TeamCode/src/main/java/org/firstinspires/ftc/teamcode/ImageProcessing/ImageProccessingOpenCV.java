@@ -141,6 +141,12 @@ public class ImageProccessingOpenCV {
 
     }
 
+    public void LabelProcessingInit()
+    {
+        labelProcessing = null;
+        findColorObject = false;
+    }
+
     class SamplePipeline extends OpenCvPipeline
     {
         boolean viewportPaused;
@@ -171,6 +177,11 @@ public class ImageProccessingOpenCV {
 
             Mat output;
 
+            //Log.d(TAG, "stat frame..");
+            findColorObject = false;
+            maxAreaBlue = 0;
+            maxAreaRed = 0;
+            maxAreaGreen = 0;
             output = gripPipelineBlue.process(input);
             output = gripPipelineRed.process(input);
             output = gripPipelineGreen.process(input);

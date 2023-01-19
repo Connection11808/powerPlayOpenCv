@@ -10,8 +10,8 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.teamcode.Hardware.ConnectionHardware;
 import org.firstinspires.ftc.teamcode.ImageProcessing.ImageProccessingOpenCV;
 
-@Autonomous(name="Autonomous", group="Robot")
-public class GoToPositionAutonomousImageProccessingSleeve extends LinearOpMode {
+@Autonomous(name="AutonomousForward", group="Robot")
+public class AutonomousForward extends LinearOpMode {
 
 
     ConnectionHardware robot = new ConnectionHardware();
@@ -49,9 +49,6 @@ public class GoToPositionAutonomousImageProccessingSleeve extends LinearOpMode {
 
         waitForStart();
         runtime.reset();
-        Log.d(TAG, "start...");
-        imageProccessingOpenCV.LabelProcessingInit();
-        //sleep(2000);
         while ((labelProcessing == null) && (opModeIsActive()) && (runtime.seconds() <= 5)) {
             labelProcessing = imageProccessingOpenCV.FindLabelProcessingOpenCV();
             Log.d(TAG, "Label Processing is = " + labelProcessing);
@@ -60,7 +57,6 @@ public class GoToPositionAutonomousImageProccessingSleeve extends LinearOpMode {
                 telemetry.addData("Label Processing is = ", labelProcessing);
                 telemetry.update();
             }
-            sleep(200);
         }
         if (labelProcessing == null)
         {
@@ -68,7 +64,8 @@ public class GoToPositionAutonomousImageProccessingSleeve extends LinearOpMode {
             telemetry.addLine("Image Processing not found label; select ONE");
             telemetry.update();
         }
-        while(opModeIsActive());
+
+
         /*gyroDrive(0.4, 140, 0);
         sleep(500);
         gyroTurn(0.3, -90);
@@ -115,37 +112,15 @@ public class GoToPositionAutonomousImageProccessingSleeve extends LinearOpMode {
     public void driveToTheSleeveParking() {
         if (labelProcessing == ImageProccessingOpenCV.LabelProcessing.ONE)
         {
-            gyroTurn(0.4, 90);
-            sleep(500);
-            gyroDrive(0.6, 47, 90);
-            sleep(500);
-            gyroTurn(0.4, 0);
-            sleep(500);
-            gyroDrive(0.6, 50, 0);
-            sleep(500);
+            gyroDrive(0.6, 55, 0);
 
         }
         else if (labelProcessing == ImageProccessingOpenCV.LabelProcessing.TWO)
         {
-
-            gyroTurn(0.4, 90);
-            sleep(500);
-            gyroDrive(0.6, 12, 90);
-            sleep(500);
-            gyroTurn(0.4, 0);
-            sleep(500);
-            gyroDrive(0.6, 50, 0);
-            sleep(500);
+            gyroDrive(0.6, 55, 0);
         }
         else {
-            gyroTurn(0.4, -90);
-            sleep(500);
-            gyroDrive(0.6, 30, -90);
-            sleep(500);
-            gyroTurn(0.4, 0);
-            sleep(500);
-            gyroDrive(0.6, 50, 0);
-            sleep(500);
+            gyroDrive(0.6, 55, 0);
 
         }
     }

@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.teamcode.Hardware.ConnectionHardware;
 import org.firstinspires.ftc.teamcode.ImageProcessing.ImageProcessingConnection;
 
-@Autonomous(name="Autonomous", group="Robot")
+@Autonomous(name="OldAutonomous", group="Robot")
 @Disabled
 public class AutonomousConnection extends LinearOpMode {
 

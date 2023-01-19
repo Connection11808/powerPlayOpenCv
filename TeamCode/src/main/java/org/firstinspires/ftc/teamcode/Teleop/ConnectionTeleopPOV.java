@@ -108,7 +108,7 @@ public class ConnectionTeleopPOV extends LinearOpMode {
             if (gamepad1.x) {
                 maxSpeed = 1.0;
             } else if (gamepad1.y) {
-                maxSpeed = 0.8;
+                maxSpeed = 0.6;
             }
 
             if (gamepad2.dpad_down) {
@@ -125,7 +125,7 @@ public class ConnectionTeleopPOV extends LinearOpMode {
                 Log.d(TAG, "The position of catchTheCone is " + robot.catchTheCone.getPosition());
             } else if (gamepad2.dpad_right) {
                 robot.setTuningClawMotor(0.95);
-                robot.setTuningArmClawMotor(0.65);
+                robot.setTuningArmClawMotor(0.59);
                 Log.d(TAG, "The position of catchTheCone is " + robot.catchTheCone.getPosition());
             }
 
@@ -250,10 +250,10 @@ public class ConnectionTeleopPOV extends LinearOpMode {
                             }
                         }
                     }
-                    Log.d(TAG, " Elevat
-                        robot.setElivatorMotor(-0.1);
-                        robot.ElivatorMotorUsingBrake();
-                    }or thread is finished");
+                    Log.d(TAG, " Elevat or thread is finished");
+                    robot.setElivatorMotor(-0.1);
+                    robot.ElivatorMotorUsingBrake();
+                    };
             } catch (Exception e) {
                 Log.d(TAG, "Elevator thread exception: " + e.getMessage());
             }
