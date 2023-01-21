@@ -2,13 +2,14 @@ package org.firstinspires.ftc.teamcode.Teleop;
 
 import android.util.Log;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.Hardware.ConnectionHardware;
 
 @TeleOp(name= "Tread", group="Pushbot")
-
+@Disabled
 public class ConnectionTeleopPOVTread extends LinearOpMode {
 
     /* Declare OpMode members. */
