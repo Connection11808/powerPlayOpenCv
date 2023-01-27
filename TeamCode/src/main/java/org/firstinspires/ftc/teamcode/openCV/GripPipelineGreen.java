@@ -60,9 +60,9 @@ public class GripPipelineGreen {
 
 		// Step HSV_Threshold0:
 		Mat hsvThresholdInput = cvResizeOutput;
-		double[] hsvThresholdHue = {26, 103};
-		double[] hsvThresholdSaturation = {188, 255};
-		double[] hsvThresholdValue = {0, 88};
+		double[] hsvThresholdHue = {44, 118};
+		double[] hsvThresholdSaturation = {85, 231};
+		double[] hsvThresholdValue = {94, 167};
 		hsvThreshold(hsvThresholdInput, hsvThresholdHue, hsvThresholdSaturation, hsvThresholdValue, hsvThresholdOutput);
 
 		// Step CV_erode0:

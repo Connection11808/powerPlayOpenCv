@@ -80,12 +80,9 @@ public class ConnectionHardware {
     public DcMotor right_frontDrive = null;
     public DcMotor right_backDrive = null;
     public DcMotor elevatorMotor = null;
+    public DcMotor arm_motor = null;
     public Servo catchTheCone = null;
     public Servo tuningClaw = null;
-    public Servo tuningArmClaw = null;
-
-
-
 
     private BNO055IMU imu;
 
@@ -106,7 +103,7 @@ public class ConnectionHardware {
         elevatorMotor = hardwareMapConnection.get(DcMotor.class, "EM");
         catchTheCone = hardwareMapConnection.get(Servo.class, "CTC");
         tuningClaw = hardwareMapConnection.get(Servo.class, "TC");
-        tuningArmClaw = hardwareMapConnection.get(Servo.class, "TAC");
+        arm_motor = hardwareMapConnection.get(DcMotor.class,"ARM");
 
 
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
@@ -118,20 +115,24 @@ public class ConnectionHardware {
         right_backDrive.setDirection(DcMotor.Direction.REVERSE);
         elevatorMotor.setDirection(DcMotorSimple.Direction.FORWARD);
 
+        tuningClaw.setDirection(Servo.Direction.FORWARD);
+
         elevatorMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         elevatorMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        arm_motor.setDirection(DcMotorSimple.Direction.FORWARD);
+        arm_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        arm_motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        arm_motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
 
         left_frontDrive.setPower(0);
         left_backDrive.setPower(0);
         right_frontDrive.setPower(0);
         right_backDrive.setPower(0);
         elevatorMotor.setPower(0);
+        arm_motor.setPower(0);
         catchTheCone.setPosition(1.0);
         tuningClaw.setPosition(0.97);
-        tuningArmClaw.setPosition(0.59);
-
-
-
 
         // If there are encoders connected, switch to RUN_USING_ENCODER mode for greater accuracy
         // leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -202,6 +203,9 @@ public class ConnectionHardware {
     public void setElivatorMotor (double power) {
         elevatorMotor.setPower(power);
     }
+    public void setArmMotor (double power) {
+        arm_motor.setPower(power);
+    }
     public void setCatchTheConeMotor (double position)
     {
         catchTheCone.setPosition(position);
@@ -209,10 +213,6 @@ public class ConnectionHardware {
     public void setTuningClawMotor (double position)
     {
         tuningClaw.setPosition(position);
-    }
-    public void setTuningArmClawMotor (double position)
-    {
-        tuningArmClaw.setPosition(position);
     }
     public int getEncoderPositionLeft_frontDrive ()
     {
@@ -337,6 +337,10 @@ public class ConnectionHardware {
     public void ElivatorMotorUsingBrake()
     {
         elevatorMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+    }
+    public void ArmMotorUsingBrake()
+    {
+        arm_motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
     public boolean Left_frontDriveIsBusy()
     {

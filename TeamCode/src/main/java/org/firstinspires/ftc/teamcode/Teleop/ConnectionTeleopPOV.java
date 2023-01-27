@@ -28,6 +28,7 @@ public class ConnectionTeleopPOV extends LinearOpMode {
         double drive;
         double turn;
         double max;
+        double armPower = 0.30;
         boolean armMotorStart = false;
         boolean collectionMotorStart = false;
         int armPosition;
@@ -108,39 +109,71 @@ public class ConnectionTeleopPOV extends LinearOpMode {
 
             }
 
-            if (gamepad1.x) {
+            if (gamepad1.x == true) {
                 maxSpeed = 1.0;
-            } else if (gamepad1.y) {
+            } else if (gamepad1.y == true) {
                 maxSpeed = 0.6;
             }
 
-            if (gamepad2.dpad_down) {
+            if (gamepad2.dpad_down == true) {
                 robot.setCatchTheConeMotor(0.6);
-                Log.d(TAG, "The position of catchTheCone is " + robot.catchTheCone.getPosition());
-            } else if (gamepad2.dpad_up) {
+//                Log.d(TAG, "The position of catchTheCone is " + robot.catchTheCone.getPosition());
+                robot.elevatorMotor.setTargetPosition(100);
+            } else if (gamepad2.dpad_up == true) {
                 robot.setCatchTheConeMotor(1.0);
                 Log.d(TAG, "The position of catchTheCone is " + robot.catchTheCone.getPosition());
             }
 
-            if (gamepad2.dpad_left) {
-                robot.setTuningClawMotor(0.2);
-                robot.setTuningArmClawMotor(0.05);
-                Log.d(TAG, "The position of catchTheCone is " + robot.catchTheCone.getPosition());
-            } else if (gamepad2.dpad_right) {
-                robot.setTuningClawMotor(0.97);
-                robot.setTuningArmClawMotor(0.59);
-                Log.d(TAG, "The position of catchTheCone is " + robot.catchTheCone.getPosition());
+            if(gamepad2.dpad_right == true){
+                robot.setTuningClawMotor(0.6);
+                robot.arm_motor.setTargetPosition(45);
+                if(robot.arm_motor.getCurrentPosition() > 45){
+                    armPower = armPower * -1;
+                }
+                robot.arm_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                robot.arm_motor.setPower(armPower);
+
+            } else if(gamepad2.dpad_left == true){
+                robot.setTuningClawMotor(1.0);
+                robot.arm_motor.setTargetPosition(395);
+                if(robot.arm_motor.getCurrentPosition() > 450){
+                    armPower = armPower * -1;
+                }
+                robot.arm_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                robot.arm_motor.setPower(armPower);
+
+
+            }else if(gamepad2.right_bumper == true){
+                robot.setTuningClawMotor(0.0);
+                robot.arm_motor.setTargetPosition(845);
+                if(robot.arm_motor.getCurrentPosition() > 845){
+                    armPower = armPower * -1;
+                }
+                robot.arm_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                robot.arm_motor.setPower(armPower);
             }
 
-            if (gamepad2.a) {
+
+            Log.d(TAG, "The position of arm is " + robot.arm_motor.getCurrentPosition());
+
+
+            if (gamepad2.left_bumper){
+                robot.resetEncoderElivatorMotor();
+                Log.d(TAG, "The position of elevator is " + robot.elevatorMotor.getCurrentPosition());
+            }
+
+            if (gamepad2.a == true) {
                 robot.setElivatorMotor(1.0);
                 Log.d(TAG, "Elevator speed is " + elivatorSpeed);
-            } else if (gamepad2.y) {
+                Log.d(TAG, "The position of elevator is " + robot.elevatorMotor.getCurrentPosition());
+            } else if (gamepad2.y == true) {
                 robot.setElivatorMotor(-1.0);
                 Log.d(TAG, "Elevator speed is " + elivatorSpeed);
+                Log.d(TAG, "The position of elevator is " + robot.elevatorMotor.getCurrentPosition());
 
             } else {
             robot.setElivatorMotor(0);
+            robot.ElivatorMotorUsingBrake();
         }
 
 

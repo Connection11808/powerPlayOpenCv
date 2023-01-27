@@ -34,6 +34,7 @@ import android.util.Log;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -51,6 +52,7 @@ public class ConnectionUnitTest extends LinearOpMode {
     double AddGrip = 0.05;
     boolean pres = false;
     private ElapsedTime runtime = new ElapsedTime();
+    private boolean armMotorStop = false;
 
     @Override
     public void runOpMode() {
@@ -62,6 +64,9 @@ public class ConnectionUnitTest extends LinearOpMode {
         connectionRobot.resetEncoderRight_frontDrive();
         connectionRobot.resetEncoderRight_backDrive();
 
+        connectionRobot.arm_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        connectionRobot.arm_motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        connectionRobot.arm_motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         Log.d(TAG, "Finish Init");
         // wait for the start button to be pressed.
@@ -217,7 +222,7 @@ public class ConnectionUnitTest extends LinearOpMode {
 
                 }
                 telemetry.addData("servo position is", positionServo);
-                connectionRobot.tuningArmClaw.setPosition(positionServo);
+                connectionRobot.tuningClaw.setPosition(positionServo);
             } else if ((true == gamepad2.dpad_left) && (false == pres)) {
                 positionServo = positionServo - AddGrip;
                 pres = true;
@@ -227,14 +232,66 @@ public class ConnectionUnitTest extends LinearOpMode {
                     telemetry.addLine("possition = 0.0");
                 }
                 telemetry.addData("servo position is", positionServo);
-                connectionRobot.tuningArmClaw.setPosition(positionServo);
+                connectionRobot.tuningClaw.setPosition(positionServo);
             } else {
                 if ((false == gamepad2.dpad_left) && (false == gamepad2.dpad_right)) {
                     pres = false;
                     telemetry.addLine("nothing is pressed");
                 }
             }
-            telemetry.addData("claw position", connectionRobot.tuningArmClaw.getPosition());
+            if (true == gamepad2.dpad_up)
+            {
+                //connectionRobot.arm_motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+               // connectionRobot.arm_motor.setTargetPosition(200);
+                connectionRobot.arm_motor.setPower(0.5);
+                //connectionRobot.arm_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                //while (connectionRobot.arm_motor.isBusy()) {
+                    Log.d(TAG, "arm motor up " + connectionRobot.arm_motor.getCurrentPosition());
+                //}
+                //Log.d(TAG, "arm motor get to position " + connectionRobot.arm_motor.getCurrentPosition());
+                //connectionRobot.arm_motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+                armMotorStop = true;
+            }
+            else if (true == gamepad2.dpad_down)
+            {
+                //connectionRobot.arm_motor.setTargetPosition(500);
+                connectionRobot.arm_motor.setPower(-0.5);
+                //connectionRobot.arm_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                //while (connectionRobot.arm_motor.isBusy()) {
+                    Log.d(TAG, "arm motor up " + connectionRobot.arm_motor.getCurrentPosition());
+                //}
+                //Log.d(TAG, "arm motor get to position " + connectionRobot.arm_motor.getCurrentPosition());
+                //connectionRobot.arm_motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+                armMotorStop = true;
+            }
+            else
+            {
+                if (true == armMotorStop) {
+                    //connectionRobot.arm_motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                    int armPosition = connectionRobot.arm_motor.getCurrentPosition();
+                    armPosition += 10;
+                    connectionRobot.arm_motor.setTargetPosition(armPosition);
+                    Log.d(TAG, "arm motor run position " + armPosition);
+                    connectionRobot.arm_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    //connectionRobot.arm_motor.setPower(-0.5);
+                    while (connectionRobot.arm_motor.isBusy()) ;
+                    Log.d(TAG, "arm motor get to position " + connectionRobot.arm_motor.getCurrentPosition());
+                    connectionRobot.arm_motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+                    //connectionRobot.arm_motor.setPower(0);
+
+                    armMotorStop = false;
+                }
+                //connectionRobot.arm_motor.setPower(0);
+            }
+
+            if (true == gamepad2.b) {
+                connectionRobot.arm_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                Log.d(TAG, "arm motor reset " + connectionRobot.arm_motor.getCurrentPosition());
+                connectionRobot.arm_motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            }
+
+            //Log.d(TAG, "arm motor position " + connectionRobot.arm_motor.getCurrentPosition());
+            telemetry.addData("claw position", connectionRobot.tuningClaw.getPosition());
             telemetry.update();
 
         }

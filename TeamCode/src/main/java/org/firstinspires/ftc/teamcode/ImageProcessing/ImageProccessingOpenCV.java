@@ -32,6 +32,7 @@ public class ImageProccessingOpenCV {
     private double maxAreaBlue = 0;
     private double maxAreaRed = 0;
     private double maxAreaGreen = 0;
+    private Mat draw = null;
 
     GripPipelineBlue gripPipelineBlue;
     GripPipelineRed gripPipelineRed;
@@ -186,7 +187,7 @@ public class ImageProccessingOpenCV {
             output = gripPipelineRed.process(input);
             output = gripPipelineGreen.process(input);
 
-            Mat draw = Mat.zeros(input.size(), CvType.CV_8UC3);
+            draw = Mat.zeros(input.size(), CvType.CV_8UC3);
             if ((gripPipelineBlue.getFindContoursOutput() != null) && (!findColorObject)) {
                 int blueSize = gripPipelineBlue.getFindContoursOutput().size();
                 Log.d(TAG, "Blue size is " + blueSize);
