@@ -249,6 +249,13 @@ public class ConnectionHardware {
         return position;
 
     }
+    public int getEncoderPositionArmMotor ()
+    {
+        int position;
+        position = arm_motor.getCurrentPosition();
+        return position;
+
+    }
     public void resetEncoderLeft_frontDrive ()
     {
         left_frontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -272,6 +279,18 @@ public class ConnectionHardware {
     public void resetEncoderElivatorMotor ()
     {
         elevatorMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        elevatorMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    }
+    public void armMotorWithoutEncoder ()
+    {
+        arm_motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    }
+    public void resetEncoderArmMotor ()
+    {
+        arm_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    }
+    public void elevatorMotorWithoutEncoder ()
+    {
         elevatorMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
     public void Left_frontDriveUsingEncoder ()

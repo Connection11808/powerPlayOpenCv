@@ -10,14 +10,14 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.teamcode.Hardware.ConnectionHardware;
 import org.firstinspires.ftc.teamcode.ImageProcessing.ImageProccessingOpenCV;
 
-@Autonomous(name="Autonomous", group="Robot")
-public class GoToPositionAutonomousImageProccessingSleeve extends LinearOpMode {
+@Autonomous(name="rectangleAutonomous", group="Robot")
+public class rectangleAutonomous extends LinearOpMode {
 
 
     ConnectionHardware robot = new ConnectionHardware();
     ImageProccessingOpenCV imageProccessingOpenCV = new ImageProccessingOpenCV();
     private ElapsedTime runtime = new ElapsedTime();
-    private String TAG = "AutonomousConnectionImageProccessing";
+    private String TAG = "rectangleAutonomous";
     private ImageProccessingOpenCV.LabelProcessing labelProcessing = null;
 
 
@@ -48,27 +48,7 @@ public class GoToPositionAutonomousImageProccessingSleeve extends LinearOpMode {
         telemetry.update();
 
         waitForStart();
-        runtime.reset();
-        Log.d(TAG, "start...");
-        imageProccessingOpenCV.LabelProcessingInit();
-        //sleep(2000);
-        while ((labelProcessing == null) && (opModeIsActive()) && (runtime.seconds() <= 5)) {
-            labelProcessing = imageProccessingOpenCV.FindLabelProcessingOpenCV();
-            Log.d(TAG, "Label Processing is = " + labelProcessing);
-            Log.d(TAG, "timer is = " + runtime.seconds());
-            if (labelProcessing != null) {
-                telemetry.addData("Label Processing is = ", labelProcessing);
-                telemetry.update();
-            }
-            sleep(200);
-        }
-        if (labelProcessing == null) {
-            labelProcessing = ImageProccessingOpenCV.LabelProcessing.TWO;
-            telemetry.addLine("Image Processing not found label; select TWO");
-            telemetry.update();
-        }
-        //while(opModeIsActive());
-        /*gyroDrive(0.4, 140, 0);
+        gyroDrive(0.4, 140, 0);
         sleep(500);
         gyroTurn(0.3, -90);
         sleep(500);
@@ -82,58 +62,38 @@ public class GoToPositionAutonomousImageProccessingSleeve extends LinearOpMode {
         sleep(500);
         gyroDrive(0.4, 55, -270);
         gyroTurn(0.3, 0);
-        gyroTurn(0.3, 0);*/
+        gyroTurn(0.3, 0);
 
-        if (labelProcessing == ImageProccessingOpenCV.LabelProcessing.ONE) {
-            Log.d(TAG, "It is " + labelProcessing);
-            telemetry.addLine("It is ONE");
-            sleep(500);
-            driveToTheSleeveParking();
 
-        } else if (labelProcessing == ImageProccessingOpenCV.LabelProcessing.TWO) {
-            Log.d(TAG, "It is " + labelProcessing);
-            telemetry.addLine("It is TWO");
-            sleep(500);
-            driveToTheSleeveParking();
-
-        } else {
-            Log.d(TAG, "It is " + labelProcessing);
-            telemetry.addLine("It is THREE");
-            sleep(500);
-            driveToTheSleeveParking();
-
-        }
-
-        while (opModeIsActive()) ;
     }
 
     public void driveToTheSleeveParking() {
         if (labelProcessing == ImageProccessingOpenCV.LabelProcessing.ONE) {
-            gyroTurn(0.45, 90);
+            gyroTurn(0.6, 90);
             sleep(500);
             gyroDrive(0.6, 47, 90);
             sleep(500);
-            gyroTurn(0.45, 0);
+            gyroTurn(0.6, 0);
             sleep(500);
             gyroDrive(0.6, 55, 0);
             sleep(500);
 
         } else if (labelProcessing == ImageProccessingOpenCV.LabelProcessing.TWO) {
 
-            gyroTurn(0.45, 90);
+            gyroTurn(0.6, 90);
             sleep(500);
             gyroDrive(0.6, 12, 90);
             sleep(500);
-            gyroTurn(0.45, 0);
+            gyroTurn(0.6, 0);
             sleep(500);
             gyroDrive(0.6, 55, 0);
             sleep(500);
         } else {
-            gyroTurn(0.45, -90);
+            gyroTurn(0.6, -90);
             sleep(500);
             gyroDrive(0.6, 30, -90);
             sleep(500);
-            gyroTurn(0.45, 0);
+            gyroTurn(0.6, 0);
             sleep(500);
             gyroDrive(0.6, 55, 0);
             sleep(500);
@@ -271,7 +231,6 @@ public class GoToPositionAutonomousImageProccessingSleeve extends LinearOpMode {
             robot.Left_backDriveUsingEncoder();
             robot.Right_backDriveUsingEncoder();
 
-
             distance = robot.cm_to_inch(distance);
             Log.d(TAG, "the distance is (inch) = " + distance);
             // Determine new target position, and pass to motor controller
@@ -285,7 +244,6 @@ public class GoToPositionAutonomousImageProccessingSleeve extends LinearOpMode {
             Log.d(TAG, "newRightFTarget is " + newRightFTarget);
             Log.d(TAG, "newLeftBTarget is " + newLeftBTarget);
             Log.d(TAG, "newRightBTarget is " + newRightBTarget);
-
 
             // Set Target and Turn On RUN_TO_POSITION
             robot.Left_frontDriveSetTargetPosition(newLeftFTarget);
@@ -317,8 +275,7 @@ public class GoToPositionAutonomousImageProccessingSleeve extends LinearOpMode {
 
             // keep looping while we are still active, and BOTH motors are running.
             while (opModeIsActive() &&
-                    (robot.Left_frontDriveIsBusy() == true && robot.Right_frontDriveIsBusy() == true
-                            && robot.Left_backDriveIsBusy() == true && robot.Right_backDriveIsBusy() == true)) {
+                    (robot.Left_frontDriveIsBusy() && robot.Right_frontDriveIsBusy() && robot.Left_backDriveIsBusy() && robot.Right_backDriveIsBusy())) {
                 //(rangLeftDriveF > 150) && (rangRightDriveF > 150) && (rangLeftDriveB > 150) && (rangRightDriveB > 150))
 
                     // adjust relative speed based on heading error.
@@ -369,19 +326,6 @@ public class GoToPositionAutonomousImageProccessingSleeve extends LinearOpMode {
                     Log.d(TAG, "Actual" + " , " + robot.getEncoderPositionLeft_backDrive() + " , " + robot.getEncoderPositionRight_backDrive());
                     Log.d(TAG, "Speed" + " , " + leftSpeed + " , " + rightSpeed);
 
-                }
-
-                if (robot.Left_frontDriveIsBusy() == false) {
-                    Log.d(TAG, "left front drive is not busy");
-                }
-                else if (robot.Right_frontDriveIsBusy() == false) {
-                    Log.d(TAG, "right front drive is not busy");
-                }
-                else if (robot.Left_backDriveIsBusy() == false) {
-                    Log.d(TAG, "left back drive is not busy");
-                }
-                else if (robot.Right_backDriveIsBusy() == false) {
-                    Log.d(TAG, "right back drive is not busy");
                 }
 
                 // Stop all motion;
