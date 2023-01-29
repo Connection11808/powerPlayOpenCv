@@ -63,6 +63,7 @@ public class ConnectionUnitTest extends LinearOpMode {
         connectionRobot.resetEncoderLeft_backDrive();
         connectionRobot.resetEncoderRight_frontDrive();
         connectionRobot.resetEncoderRight_backDrive();
+        connectionRobot.resetEncoderElivatorMotor();
 
         connectionRobot.arm_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         connectionRobot.arm_motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
