@@ -64,7 +64,7 @@ public class AutonomousForward extends LinearOpMode {
             telemetry.addLine("Image Processing not found label; select ONE");
             telemetry.update();
         }
-
+        imageProccessingOpenCV.StopRobot();
 
         /*gyroDrive(0.4, 140, 0);
         sleep(500);

@@ -98,7 +98,7 @@ public class ConnectionHardware {
     public void init(HardwareMap hardwareMapConnection) {
         left_frontDrive = hardwareMapConnection.get(DcMotor.class, "LFD");
         left_backDrive = hardwareMapConnection.get(DcMotor.class, "LBD");
-        right_frontDrive = hardwareMapConnection.get(DcMotor.class, "RFD");
+        right_frontDrive =  hardwareMapConnection.get(DcMotor.class, "RFD");
         right_backDrive = hardwareMapConnection.get(DcMotor.class, "RBD");
         elevatorMotor = hardwareMapConnection.get(DcMotor.class, "EM");
         catchTheCone = hardwareMapConnection.get(Servo.class, "CTC");

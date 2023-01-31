@@ -13,7 +13,6 @@ import org.firstinspires.ftc.teamcode.Hardware.ConnectionHardware;
 import org.firstinspires.ftc.teamcode.ImageProcessing.ImageProccessingOpenCV;
 
 @Autonomous(name="ConeAutonomous", group="Robot")
-@Disabled
 public class ConeAutonomous extends LinearOpMode {
 
 
@@ -35,6 +34,7 @@ public class ConeAutonomous extends LinearOpMode {
     static final double P_DRIVE_COEFF = 0.03;     // Larger is more responsive, but also less stable
     static final double HEADING_THRESHOLD = 1;      // As tight as we can make it with an integer gyro
     double armPower = 0.30;
+    double elevatorPower = 0.30;
 
 
     @Override
@@ -116,13 +116,32 @@ public class ConeAutonomous extends LinearOpMode {
         robot.arm_motor.setPower(armPower);
         gyroTurn(0.45, -90);
         sleep(500);
-        gyroDrive(0.6, 35, -90);
+        gyroDrive(0.4, 33, -90);
         sleep(500);
         gyroTurn(0.45, 0);
         sleep(500);
-        gyroDrive(0.6, 107, 0);
+        gyroDrive(0.4, 120, 0);
         sleep(500);
-        gyroTurn(0.45, 45);
+        gyroTurn(0.45, 38);
+        sleep(500);
+        robot.elevatorMotor.setTargetPosition(1828);
+        if(robot.elevatorMotor.getCurrentPosition() > 1828){
+            elevatorPower = elevatorPower * -1;
+        }
+        robot.elevatorMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.elevatorMotor.setPower(elevatorPower);
+        sleep(4000);
+        gyroDrive(0.4, -5, 38);
+        sleep(500);
+        robot.elevatorMotor.setTargetPosition(1300);
+        if(robot.elevatorMotor.getCurrentPosition() > 1200){
+            elevatorPower = elevatorPower * -1;
+        }
+        robot.elevatorMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.elevatorMotor.setPower(elevatorPower);
+        sleep(4000);
+        robot.setCatchTheConeMotor(0.6);
+
 
         while (opModeIsActive()) ;
     }

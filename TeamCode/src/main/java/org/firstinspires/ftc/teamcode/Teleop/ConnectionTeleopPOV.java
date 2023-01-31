@@ -209,14 +209,14 @@ public class ConnectionTeleopPOV extends LinearOpMode {
             //Log.d(TAG, "The position of arm is " + robot.arm_motor.getCurrentPosition());
 
 
-            if (gamepad2.a == true) {
+            if (gamepad2.y == true) {
                 Log.d(TAG, "press A");
                 robot.elevatorMotorWithoutEncoder();
                 elevatorIsMoving = true;
                 robot.setElivatorMotor(1.0);
                 Log.d(TAG, "Elevator speed is " + robot.elevatorMotor.getPower());
                 Log.d(TAG, "The position of elevator is " + robot.elevatorMotor.getCurrentPosition());
-            } else if (gamepad2.y == true) {
+            } else if (gamepad2.a == true) {
                 Log.d(TAG, "press Y");
                 robot.elevatorMotorWithoutEncoder();
                 elevatorIsMoving = true;
