@@ -249,7 +249,7 @@ public class ImageProccessingOpenCV {
                         }
                     }
 
-                    if (maxAreaRed > 800) {
+                    if (maxAreaRed > 400) {
                         findColorObject = true;
                         labelProcessing = LabelProcessing.ONE;
                         Log.d(TAG, "findColorObject red is true");
@@ -272,7 +272,7 @@ public class ImageProccessingOpenCV {
                         }
                     }
 
-                    if (maxAreaGreen > 700) {
+                    if (maxAreaGreen > 500) {
                         findColorObject = true;
                         labelProcessing = LabelProcessing.TWO;
                         Log.d(TAG, "findColorObject green is true");

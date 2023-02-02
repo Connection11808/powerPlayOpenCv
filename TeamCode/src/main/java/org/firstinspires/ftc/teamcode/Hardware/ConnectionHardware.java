@@ -132,7 +132,7 @@ public class ConnectionHardware {
         elevatorMotor.setPower(0);
         arm_motor.setPower(0);
         catchTheCone.setPosition(1.0);
-        tuningClaw.setPosition(0.97);
+        tuningClaw.setPosition(0.1);
 
         // If there are encoders connected, switch to RUN_USING_ENCODER mode for greater accuracy
         // leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -389,6 +389,12 @@ public class ConnectionHardware {
     {
         boolean isBusy;
         isBusy = elevatorMotor.isBusy();
+        return isBusy;
+    }
+    public boolean ArmMotorIsBusy()
+    {
+        boolean isBusy;
+        isBusy = arm_motor.isBusy();
         return isBusy;
     }
 

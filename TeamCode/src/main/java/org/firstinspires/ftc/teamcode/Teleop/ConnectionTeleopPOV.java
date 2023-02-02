@@ -36,6 +36,9 @@ public class ConnectionTeleopPOV extends LinearOpMode {
         //float elivatorSpeed = 0.85f;
         boolean triggersPress = false;
         boolean elevatorIsMoving = false;
+        double positionServo = 0.0;
+        double AddGrip = 0.05;
+        boolean pres = false;
 
 
 
@@ -117,6 +120,7 @@ public class ConnectionTeleopPOV extends LinearOpMode {
                 maxSpeed = 0.6;
             }
 
+
             if (gamepad1.a)
             {
                 robot.resetEncoderArmMotor();
@@ -134,9 +138,9 @@ public class ConnectionTeleopPOV extends LinearOpMode {
 
             if(gamepad2.dpad_right == true){
                 triggersPress = false;
-                robot.setTuningClawMotor(0.7);
-                robot.arm_motor.setTargetPosition(5);
-                if(robot.arm_motor.getCurrentPosition() > 5){
+                robot.setTuningClawMotor(0.25);
+                robot.arm_motor.setTargetPosition(43);
+                if(robot.arm_motor.getCurrentPosition() > 43){
                     armPower = armPower * -1;
                 }
                 robot.arm_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -144,7 +148,7 @@ public class ConnectionTeleopPOV extends LinearOpMode {
 
             } else if(gamepad2.dpad_left == true){
                 triggersPress = false;
-                robot.setTuningClawMotor(1.0);
+                robot.setTuningClawMotor(0.05);
                 robot.arm_motor.setTargetPosition(257);
                 if(robot.arm_motor.getCurrentPosition() > 257){
                     armPower = armPower * -1;
@@ -155,7 +159,7 @@ public class ConnectionTeleopPOV extends LinearOpMode {
 
             }else if(gamepad2.right_bumper == true){
                 triggersPress = false;
-                robot.setTuningClawMotor(0.0);
+                robot.setTuningClawMotor(0.65);
                 robot.arm_motor.setTargetPosition(813);
                 if(robot.arm_motor.getCurrentPosition() > 813){
                     armPower = armPower * -1;

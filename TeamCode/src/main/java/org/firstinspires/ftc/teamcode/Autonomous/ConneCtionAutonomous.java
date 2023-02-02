@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.Autonomous;
 import android.util.Log;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -12,9 +11,8 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.teamcode.Hardware.ConnectionHardware;
 import org.firstinspires.ftc.teamcode.ImageProcessing.ImageProccessingOpenCV;
 
-@Autonomous(name="ConeAutonomous", group="Robot")
-@Disabled
-public class ConeAutonomous extends LinearOpMode {
+@Autonomous(name="ConneCtionAutonomous", group="Robot")
+public class ConneCtionAutonomous extends LinearOpMode {
 
 
     ConnectionHardware robot = new ConnectionHardware();
@@ -22,7 +20,7 @@ public class ConeAutonomous extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
     private String TAG = "AutonomousConnectionImageProccessing";
     private ImageProccessingOpenCV.LabelProcessing labelProcessing = null;
-
+    private final long sleepMsec = 200;
 
     static final double COUNTS_PER_MOTOR_REV = (134.4 * 4);  // PPR is 134.4 ; CPR = PPR * 4 for 1:20 Motor
     static final double DRIVE_GEAR_REDUCTION = (16.0 / 18.0);     // No External Gearing.
@@ -53,10 +51,11 @@ public class ConeAutonomous extends LinearOpMode {
         telemetry.update();
 
         waitForStart();
-        /*runtime.reset();
+        runtime.reset();
         Log.d(TAG, "start...");
         imageProccessingOpenCV.LabelProcessingInit();
-        while ((labelProcessing == null) && (opModeIsActive()) && (runtime.seconds() <= 5)) {
+        //sleep(2000);
+        while ((labelProcessing == null) && (opModeIsActive()) && (!isStopRequested()) && (runtime.seconds() <= 5)) {
             labelProcessing = imageProccessingOpenCV.FindLabelProcessingOpenCV();
             Log.d(TAG, "Label Processing is = " + labelProcessing);
             Log.d(TAG, "timer is = " + runtime.seconds());
@@ -64,120 +63,184 @@ public class ConeAutonomous extends LinearOpMode {
                 telemetry.addData("Label Processing is = ", labelProcessing);
                 telemetry.update();
             }
-            sleep(200);
+            connectionSleep(200);
         }
         if (labelProcessing == null) {
             labelProcessing = ImageProccessingOpenCV.LabelProcessing.TWO;
             telemetry.addLine("Image Processing not found label; select TWO");
             telemetry.update();
-        }*/
-        //while(opModeIsActive());
-        /*gyroDrive(0.4, 140, 0);
-        sleep(500);
-        gyroTurn(0.3, -90);
-        sleep(500);
-        gyroDrive(0.4, 55, -90);
-        sleep(500);
-        gyroTurn(0.3, -180);
-        sleep(500);
-        gyroDrive(0.4, 140, -180);
-        sleep(500);
-        gyroTurn(0.3, -270);
-        sleep(500);
-        gyroDrive(0.4, 55, -270);
-        gyroTurn(0.3, 0);
-        gyroTurn(0.3, 0);*/
+        }
+        imageProccessingOpenCV.StopRobot();
 
-        /*if (labelProcessing == ImageProccessingOpenCV.LabelProcessing.ONE) {
-            Log.d(TAG, "It is " + labelProcessing);
-            telemetry.addLine("It is ONE");
-            sleep(500);
-            driveToTheSleeveParking();
-
-        } else if (labelProcessing == ImageProccessingOpenCV.LabelProcessing.TWO) {
-            Log.d(TAG, "It is " + labelProcessing);
-            telemetry.addLine("It is TWO");
-            sleep(500);
-            driveToTheSleeveParking();
-
-        } else {
-            Log.d(TAG, "It is " + labelProcessing);
-            telemetry.addLine("It is THREE");
-            sleep(500);
-            driveToTheSleeveParking();
-
-        }*/
-
-        robot.setTuningClawMotor(1.0);
+        gyroTurn(0.45, 90);
+        connectionSleep(sleepMsec);
+        gyroDrive(0.6, 9, 90);
+        connectionSleep(sleepMsec);
+        gyroTurn(0.45, 0);
+        connectionSleep(sleepMsec);
+        gyroDrive(0.4, 114, 0);
+        connectionSleep(sleepMsec);
+        gyroTurn(0.45, 0);
+        connectionSleep(sleepMsec);
+        robot.setTuningClawMotor(0.05);
         robot.arm_motor.setTargetPosition(257);
         if(robot.arm_motor.getCurrentPosition() > 257){
             armPower = armPower * -1;
         }
         robot.arm_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.arm_motor.setPower(armPower);
-        gyroTurn(0.45, -90);
-        sleep(500);
-        gyroDrive(0.4, 33, -90);
-        sleep(500);
-        gyroTurn(0.45, 0);
-        sleep(500);
-        gyroDrive(0.4, 120, 0);
-        sleep(500);
-        gyroTurn(0.45, 38);
-        sleep(500);
+        runtime.reset();
+        while ((opModeIsActive()) && (robot.ArmMotorIsBusy()) && (runtime.seconds() <= 3))
+        {
+            Log.d(TAG, "arm encoder is " + robot.getEncoderPositionArmMotor());
+        }
+        connectionSleep(sleepMsec);
+        gyroTurn(0.45, -45);
+        connectionSleep(sleepMsec);
+        gyroDrive(0.4, 8, -45);
+        connectionSleep(sleepMsec);
+        gyroTurn(0.45, -45);
+        connectionSleep(sleepMsec);
         robot.elevatorMotor.setTargetPosition(1828);
         if(robot.elevatorMotor.getCurrentPosition() > 1828){
             elevatorPower = elevatorPower * -1;
         }
         robot.elevatorMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.elevatorMotor.setPower(elevatorPower);
-        sleep(4000);
-        gyroDrive(0.4, -5, 38);
-        sleep(500);
-        robot.elevatorMotor.setTargetPosition(1300);
-        if(robot.elevatorMotor.getCurrentPosition() > 1200){
+        runtime.reset();
+        while ((opModeIsActive()) && (robot.ElivatorMotorIsBusy()) && (runtime.seconds() <= 3))
+        {
+            Log.d(TAG, "elevator encoder is " + robot.getEncoderPositionElivatorMotor());
+        }
+        connectionSleep(sleepMsec);
+        gyroDrive(0.4, 3, -45);
+        connectionSleep(sleepMsec);
+        gyroTurn(0.45, -37);
+        connectionSleep(sleepMsec);
+        robot.elevatorMotor.setTargetPosition(1500);
+        if(robot.elevatorMotor.getCurrentPosition() > 1500){
             elevatorPower = elevatorPower * -1;
         }
         robot.elevatorMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.elevatorMotor.setPower(elevatorPower);
-        sleep(4000);
+        runtime.reset();
+        while ((opModeIsActive()) && (robot.ElivatorMotorIsBusy()) && (runtime.seconds() <= 3))
+        {
+            Log.d(TAG, "elevator encoder is " + robot.getEncoderPositionElivatorMotor());
+        }
+        connectionSleep(sleepMsec);
         robot.setCatchTheConeMotor(0.6);
+        connectionSleep(sleepMsec);
+        gyroTurn(0.45, -180);
+        connectionSleep(sleepMsec);
+        robot.elevatorMotor.setTargetPosition(200);
+        if(robot.elevatorMotor.getCurrentPosition() > 200){
+            elevatorPower = elevatorPower * -1;
+        }
+        robot.elevatorMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.elevatorMotor.setPower(elevatorPower);
+        connectionSleep(sleepMsec);
+        gyroDrive(0.6, 54, -180);
+        connectionSleep(sleepMsec);
+        robot.setCatchTheConeMotor(1.0);
+        connectionSleep(sleepMsec);
+        robot.setTuningClawMotor(0.25);
+        robot.arm_motor.setTargetPosition(43);
+        if(robot.arm_motor.getCurrentPosition() > 43){
+            armPower = armPower * -1;
+        }
+        robot.arm_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.arm_motor.setPower(armPower);
+        gyroTurn(0.45, -180);
+        robot.arm_motor.setPower(armPower);
+        gyroTurn(0.45, -180);
+        if (labelProcessing == ImageProccessingOpenCV.LabelProcessing.ONE) {
+            Log.d(TAG, "It is " + labelProcessing);
+            telemetry.addLine("It is ONE");
+            connectionSleep(sleepMsec);
+            gyroTurn(0.45, 90);
+            connectionSleep(sleepMsec);
+            gyroDrive(0.4, 60, 90);
+            connectionSleep(sleepMsec);
+            gyroTurn(0.45, 0);
+            connectionSleep(sleepMsec);
+            gyroTurn(0.45, 0);
+
+        }
+        else if (labelProcessing == ImageProccessingOpenCV.LabelProcessing.TWO)
+        {
+            Log.d(TAG, "It is " + labelProcessing);
+            telemetry.addLine("It is TWO");
+            connectionSleep(sleepMsec);
+            gyroTurn(0.45, 0);
+            connectionSleep(sleepMsec);
+            gyroTurn(0.45, 0);
+        }
+        else {
+            Log.d(TAG, "It is " + labelProcessing);
+            telemetry.addLine("It is THREE");
+            gyroTurn(0.45, -90);
+            connectionSleep(sleepMsec);
+            gyroDrive(0.4, 45, -90);
+            connectionSleep(sleepMsec);
+            gyroTurn(0.45, 0);
+            connectionSleep(sleepMsec);
+            gyroTurn(0.45, 0);
+        }
 
 
-        while (opModeIsActive()) ;
+
+        while (opModeIsActive() && (!isStopRequested())) ;
     }
 
     public void driveToTheSleeveParking() {
         if (labelProcessing == ImageProccessingOpenCV.LabelProcessing.ONE) {
             gyroTurn(0.45, 90);
-            sleep(500);
+            connectionSleep(500);
             gyroDrive(0.6, 47, 90);
-            sleep(500);
+            connectionSleep(500);
             gyroTurn(0.45, 0);
-            sleep(500);
+            connectionSleep(500);
             gyroDrive(0.6, 55, 0);
-            sleep(500);
+            connectionSleep(500);
+            gyroTurn(0.45, 0);
 
         } else if (labelProcessing == ImageProccessingOpenCV.LabelProcessing.TWO) {
 
             gyroTurn(0.45, 90);
-            sleep(500);
+            connectionSleep(500);
             gyroDrive(0.6, 12, 90);
-            sleep(500);
+            connectionSleep(500);
             gyroTurn(0.45, 0);
-            sleep(500);
+            connectionSleep(500);
             gyroDrive(0.6, 55, 0);
-            sleep(500);
+            connectionSleep(500);
+            gyroTurn(0.45, 0);
         } else {
             gyroTurn(0.45, -90);
-            sleep(500);
+            connectionSleep(500);
             gyroDrive(0.6, 30, -90);
-            sleep(500);
+            connectionSleep(500);
             gyroTurn(0.45, 0);
-            sleep(500);
+            connectionSleep(500);
             gyroDrive(0.6, 55, 0);
-            sleep(500);
+            connectionSleep(500);
+            gyroTurn(0.45, 0);
 
+        }
+    }
+    public void connectionSleep (long milliseconds)
+    {
+        if ((opModeIsActive()) && (!isStopRequested()))
+        {
+            sleep(milliseconds);
+        }
+        else
+        {
+            robot.setLeft_frontDrive(0);
+            robot.setRight_frontDrive(0);
+            robot.setLeft_backDrive(0);
+            robot.setRight_backDrive(0);
         }
     }
 
@@ -208,11 +271,28 @@ public class ConeAutonomous extends LinearOpMode {
 
     public void gyroTurn(double speed, double angle) {
         // keep looping while we are still active, and not on heading.
-        while (opModeIsActive() && !onHeading(speed, angle, P_TURN_COEFF, HEADING_THRESHOLD)) {
+        Log.d(TAG, "first turn, angle is" + angle);
+        while ((opModeIsActive()) && (!isStopRequested()) && (!onHeading(speed, angle, P_TURN_COEFF, 2))) {
             // Updates telemetry & Allow time for other processes to run.
             telemetry.update();
         }
+        connectionSleep(100);
+        Log.d(TAG, "second turn, angle is " + angle);
+        while ((opModeIsActive()) && (!isStopRequested()) && (!onHeading((speed/2), angle, 0.1, 1))) {
+            // Updates telemetry & Allow time for other processes to run.
+            telemetry.update();
+        }
+        Log.d(TAG, "finish turn, angle is " + angle);
+
+        robot.setLeft_frontDrive(0);
+        robot.setRight_frontDrive(0);
+        robot.setLeft_backDrive(0);
+        robot.setRight_backDrive(0);
+        Log.d(TAG, "stop turn");
+
         Log.d(TAG, "The angle is " + robot.GetImuAngle());
+
+
 
     }
 
@@ -235,6 +315,17 @@ public class ConeAutonomous extends LinearOpMode {
         } else {
             steer = getSteer(error, PCoeff);
             rightSpeed = speed * steer;
+            if (Math.abs(rightSpeed) < 0.25)
+            {
+                if (rightSpeed < 0)
+                {
+                    rightSpeed = -0.25;
+                }
+                else
+                {
+                    rightSpeed = 0.25;
+                }
+            }
             leftSpeed = -rightSpeed;
         }
 
@@ -267,8 +358,8 @@ public class ConeAutonomous extends LinearOpMode {
         robotError = targetAngle - robot.GetImuAngle();
         Log.d(TAG, "target angle is " + targetAngle);
         Log.d(TAG, "angle is " + gyroAngle);
-        while (robotError > 180) robotError -= 360;
-        while (robotError <= -180) robotError += 360;
+        while (robotError > 180 && (opModeIsActive()) && (!isStopRequested())) robotError -= 360;
+        while (robotError <= -180 && (opModeIsActive()) && (!isStopRequested())) robotError += 360;
         return robotError;
     }
 
@@ -299,7 +390,7 @@ public class ConeAutonomous extends LinearOpMode {
 
 
         // Ensure that the opmode is still active
-        if (opModeIsActive()) {
+        if ((opModeIsActive()) && (!isStopRequested())) {
 
             robot.resetEncoderLeft_frontDrive();
             robot.resetEncoderRight_frontDrive();
@@ -356,7 +447,7 @@ public class ConeAutonomous extends LinearOpMode {
 
 
             // keep looping while we are still active, and BOTH motors are running.
-            while (opModeIsActive() &&
+            while ((opModeIsActive()) && (!isStopRequested()) &&
                     (robot.Left_frontDriveIsBusy() == true && robot.Right_frontDriveIsBusy() == true
                             && robot.Left_backDriveIsBusy() == true && robot.Right_backDriveIsBusy() == true)) {
                 //(rangLeftDriveF > 150) && (rangRightDriveF > 150) && (rangLeftDriveB > 150) && (rangRightDriveB > 150))
@@ -411,7 +502,7 @@ public class ConeAutonomous extends LinearOpMode {
 
                 }
 
-                if (robot.Left_frontDriveIsBusy() == false) {
+                /*f (robot.Left_frontDriveIsBusy() == false) {
                     Log.d(TAG, "left front drive is not busy");
                 }
                 else if (robot.Right_frontDriveIsBusy() == false) {
@@ -422,7 +513,7 @@ public class ConeAutonomous extends LinearOpMode {
                 }
                 else if (robot.Right_backDriveIsBusy() == false) {
                     Log.d(TAG, "right back drive is not busy");
-                }
+                }*/
 
                 // Stop all motion;
                 robot.setLeft_frontDrive(0);
@@ -437,7 +528,14 @@ public class ConeAutonomous extends LinearOpMode {
                 robot.Left_backDriveUsingEncoder();
                 robot.Right_backDriveUsingEncoder();
             }
+        else
+        {
+            robot.setLeft_frontDrive(0);
+            robot.setRight_frontDrive(0);
+            robot.setLeft_backDrive(0);
+            robot.setRight_backDrive(0);
         }
+    }
 
         public void sideDriveAutonomous ( double speed)
         {
