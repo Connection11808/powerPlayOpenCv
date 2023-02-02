@@ -34,6 +34,9 @@ public class ImageProccessingOpenCV {
     private double maxAreaGreen = 0;
     private Mat draw = null;
     private boolean stopRobot = false;
+    private Scalar colorRed = null;
+    private Scalar colorBlue = null;
+    private Scalar colorGreen = null;
 
     GripPipelineBlue gripPipelineBlue;
     GripPipelineRed gripPipelineRed;
@@ -54,6 +57,10 @@ public class ImageProccessingOpenCV {
         gripPipelineBlue = new GripPipelineBlue();
         gripPipelineRed = new GripPipelineRed();
         gripPipelineGreen = new GripPipelineGreen();
+        colorRed = new Scalar(255, 0, 0);
+        colorGreen = new Scalar(0, 255, 0);
+        colorBlue = new Scalar(0, 0, 255);
+
 
 
         /*
@@ -197,9 +204,10 @@ public class ImageProccessingOpenCV {
                 maxAreaBlue = 0;
                 maxAreaRed = 0;
                 maxAreaGreen = 0;
-                output = gripPipelineBlue.process(input);
-                output = gripPipelineRed.process(input);
-                output = gripPipelineGreen.process(input);
+
+                output = gripPipelineBlue.process(input.clone());
+                output = gripPipelineRed.process(input.clone());
+                output = gripPipelineGreen.process(input.clone());
 
                 draw = Mat.zeros(input.size(), CvType.CV_8UC3);
                 if ((gripPipelineBlue.getFindContoursOutput() != null) && (!findColorObject)) {
@@ -208,8 +216,7 @@ public class ImageProccessingOpenCV {
 
                     for (int i = 0; i < blueSize; i++) {
                         // Calculating the area
-                        Scalar color = new Scalar(0, 0, 255);
-                        Imgproc.drawContours(draw, gripPipelineBlue.getFindContoursOutput(), i, color, 2,
+                        Imgproc.drawContours(draw, gripPipelineBlue.getFindContoursOutput(), i, colorBlue, 2,
                                 Imgproc.LINE_8, gripPipelineBlue.hierarchy, 2, new Point());
                         Log.d(TAG, "Blue area [" + i + "] = " + Imgproc.contourArea(gripPipelineBlue.getFindContoursOutput().get(i)));
                         if (Imgproc.contourArea(gripPipelineBlue.getFindContoursOutput().get(i)) > maxAreaBlue) {
@@ -234,8 +241,7 @@ public class ImageProccessingOpenCV {
 
                     for (int i = 0; i < redSize; i++) {
                         // Calculating the area
-                        Scalar color = new Scalar(255, 0, 0);
-                        Imgproc.drawContours(draw, gripPipelineRed.getFindContoursOutput(), i, color, 2,
+                        Imgproc.drawContours(draw, gripPipelineRed.getFindContoursOutput(), i, colorRed, 2,
                                 Imgproc.LINE_8, gripPipelineRed.hierarchy, 2, new Point());
                         Log.d(TAG, "Red area [" + i + "] = " + Imgproc.contourArea(gripPipelineRed.getFindContoursOutput().get(i)));
                         if (Imgproc.contourArea(gripPipelineRed.getFindContoursOutput().get(i)) > maxAreaRed) {
@@ -243,7 +249,7 @@ public class ImageProccessingOpenCV {
                         }
                     }
 
-                    if (maxAreaRed > 850) {
+                    if (maxAreaRed > 800) {
                         findColorObject = true;
                         labelProcessing = LabelProcessing.ONE;
                         Log.d(TAG, "findColorObject red is true");
@@ -258,8 +264,7 @@ public class ImageProccessingOpenCV {
 
                     for (int i = 0; i < greenSize; i++) {
                         // Calculating the area
-                        Scalar color = new Scalar(0, 255, 0);
-                        Imgproc.drawContours(draw, gripPipelineGreen.getFindContoursOutput(), i, color, 2,
+                        Imgproc.drawContours(draw, gripPipelineGreen.getFindContoursOutput(), i, colorGreen, 2,
                                 Imgproc.LINE_8, gripPipelineGreen.hierarchy, 2, new Point());
                         Log.d(TAG, "Green area [" + i + "] = " + Imgproc.contourArea(gripPipelineGreen.getFindContoursOutput().get(i)));
                         if (Imgproc.contourArea(gripPipelineGreen.getFindContoursOutput().get(i)) > maxAreaGreen) {
@@ -267,7 +272,7 @@ public class ImageProccessingOpenCV {
                         }
                     }
 
-                    if (maxAreaGreen > 850) {
+                    if (maxAreaGreen > 700) {
                         findColorObject = true;
                         labelProcessing = LabelProcessing.TWO;
                         Log.d(TAG, "findColorObject green is true");

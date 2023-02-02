@@ -120,9 +120,6 @@ public class GoToPositionAutonomousImageProccessingSleeve extends LinearOpMode {
             gyroDrive(0.6, 55, 0);
             connectionSleep(500);
             gyroTurn(0.45, 0);
-            connectionSleep(500);
-            gyroTurn(0.45, 0);
-            connectionSleep(500);
 
         } else if (labelProcessing == ImageProccessingOpenCV.LabelProcessing.TWO) {
 
@@ -135,9 +132,6 @@ public class GoToPositionAutonomousImageProccessingSleeve extends LinearOpMode {
             gyroDrive(0.6, 55, 0);
             connectionSleep(500);
             gyroTurn(0.45, 0);
-            connectionSleep(500);
-            gyroTurn(0.45, 0);
-            connectionSleep(500);
         } else {
             gyroTurn(0.45, -90);
             connectionSleep(500);
@@ -148,9 +142,6 @@ public class GoToPositionAutonomousImageProccessingSleeve extends LinearOpMode {
             gyroDrive(0.6, 55, 0);
             connectionSleep(500);
             gyroTurn(0.45, 0);
-            connectionSleep(500);
-            gyroTurn(0.45, 0);
-            connectionSleep(500);
 
         }
     }
@@ -196,10 +187,19 @@ public class GoToPositionAutonomousImageProccessingSleeve extends LinearOpMode {
 
     public void gyroTurn(double speed, double angle) {
         // keep looping while we are still active, and not on heading.
-        while ((opModeIsActive()) && (!isStopRequested()) && (!onHeading(speed, angle, P_TURN_COEFF, HEADING_THRESHOLD))) {
+        Log.d(TAG, "first turn, angle is" + angle);
+        while ((opModeIsActive()) && (!isStopRequested()) && (!onHeading(speed, angle, P_TURN_COEFF, 2))) {
             // Updates telemetry & Allow time for other processes to run.
             telemetry.update();
         }
+        connectionSleep(100);
+        Log.d(TAG, "second turn, angle is " + angle);
+        while ((opModeIsActive()) && (!isStopRequested()) && (!onHeading((speed/2), angle, 0.1, 1))) {
+            // Updates telemetry & Allow time for other processes to run.
+            telemetry.update();
+        }
+        Log.d(TAG, "finish turn, angle is " + angle);
+
         robot.setLeft_frontDrive(0);
         robot.setRight_frontDrive(0);
         robot.setLeft_backDrive(0);
@@ -231,6 +231,17 @@ public class GoToPositionAutonomousImageProccessingSleeve extends LinearOpMode {
         } else {
             steer = getSteer(error, PCoeff);
             rightSpeed = speed * steer;
+            if (Math.abs(rightSpeed) < 0.25)
+            {
+                if (rightSpeed < 0)
+                {
+                    rightSpeed = -0.25;
+                }
+                else
+                {
+                    rightSpeed = 0.25;
+                }
+            }
             leftSpeed = -rightSpeed;
         }
 
