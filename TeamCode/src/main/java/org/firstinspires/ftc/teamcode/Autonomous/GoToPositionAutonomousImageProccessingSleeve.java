@@ -22,13 +22,13 @@ public class GoToPositionAutonomousImageProccessingSleeve extends LinearOpMode {
 
 
     static final double COUNTS_PER_MOTOR_REV = (134.4 * 4);  // PPR is 134.4 ; CPR = PPR * 4 for 1:20 Motor
-    static final double DRIVE_GEAR_REDUCTION = (16.0/18.0);     // No External Gearing.
+    static final double DRIVE_GEAR_REDUCTION = (16.0 / 18.0);     // No External Gearing.
     static final double WHEEL_DIAMETER_INCHES = 4.0;     // For figuring circumference
     static final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
             (WHEEL_DIAMETER_INCHES * 3.1415);
     static final double DRIVE_SPEED = 0.6;
     static final double TURN_SPEED = 0.5;
-    static final double P_TURN_COEFF = 0.05;     // Larger is more responsive, but also less stable
+    static final double P_TURN_COEFF = 0.08;     // Larger is more responsive, but also less stable
     static final double P_DRIVE_COEFF = 0.03;     // Larger is more responsive, but also less stable
     static final double HEADING_THRESHOLD = 1;      // As tight as we can make it with an integer gyro
 
@@ -52,7 +52,7 @@ public class GoToPositionAutonomousImageProccessingSleeve extends LinearOpMode {
         Log.d(TAG, "start...");
         imageProccessingOpenCV.LabelProcessingInit();
         //sleep(2000);
-        while ((labelProcessing == null) && (opModeIsActive()) && (runtime.seconds() <= 5)) {
+        while ((labelProcessing == null) && (opModeIsActive()) && (!isStopRequested()) && (runtime.seconds() <= 5)) {
             labelProcessing = imageProccessingOpenCV.FindLabelProcessingOpenCV();
             Log.d(TAG, "Label Processing is = " + labelProcessing);
             Log.d(TAG, "timer is = " + runtime.seconds());
@@ -60,15 +60,16 @@ public class GoToPositionAutonomousImageProccessingSleeve extends LinearOpMode {
                 telemetry.addData("Label Processing is = ", labelProcessing);
                 telemetry.update();
             }
-            sleep(200);
+            connectionSleep(200);
         }
-        if (labelProcessing == null)
-        {
-            labelProcessing = ImageProccessingOpenCV.LabelProcessing.ONE;
-            telemetry.addLine("Image Processing not found label; select ONE");
+        if (labelProcessing == null) {
+            labelProcessing = ImageProccessingOpenCV.LabelProcessing.TWO;
+            telemetry.addLine("Image Processing not found label; select TWO");
             telemetry.update();
         }
-        while(opModeIsActive());
+        imageProccessingOpenCV.StopRobot();
+
+        //while(opModeIsActive());
         /*gyroDrive(0.4, 140, 0);
         sleep(500);
         gyroTurn(0.3, -90);
@@ -85,68 +86,77 @@ public class GoToPositionAutonomousImageProccessingSleeve extends LinearOpMode {
         gyroTurn(0.3, 0);
         gyroTurn(0.3, 0);*/
 
-        if (labelProcessing == ImageProccessingOpenCV.LabelProcessing.ONE)
-        {
+        if (labelProcessing == ImageProccessingOpenCV.LabelProcessing.ONE) {
             Log.d(TAG, "It is " + labelProcessing);
             telemetry.addLine("It is ONE");
-            sleep(500);
+            connectionSleep(500);
             driveToTheSleeveParking();
 
-        }
-        else if (labelProcessing == ImageProccessingOpenCV.LabelProcessing.TWO)
-        {
+        } else if (labelProcessing == ImageProccessingOpenCV.LabelProcessing.TWO) {
             Log.d(TAG, "It is " + labelProcessing);
             telemetry.addLine("It is TWO");
-            sleep(500);
+            connectionSleep(500);
             driveToTheSleeveParking();
 
-        }
-        else {
+        } else {
             Log.d(TAG, "It is " + labelProcessing);
             telemetry.addLine("It is THREE");
-            sleep(500);
+            connectionSleep(500);
             driveToTheSleeveParking();
 
         }
 
-        while(opModeIsActive());
+        while (opModeIsActive() && (!isStopRequested())) ;
     }
 
     public void driveToTheSleeveParking() {
-        if (labelProcessing == ImageProccessingOpenCV.LabelProcessing.ONE)
-        {
-            gyroTurn(0.4, 90);
-            sleep(500);
+        if (labelProcessing == ImageProccessingOpenCV.LabelProcessing.ONE) {
+            gyroTurn(0.45, 90);
+            connectionSleep(500);
             gyroDrive(0.6, 47, 90);
-            sleep(500);
-            gyroTurn(0.4, 0);
-            sleep(500);
-            gyroDrive(0.6, 50, 0);
-            sleep(500);
+            connectionSleep(500);
+            gyroTurn(0.45, 0);
+            connectionSleep(500);
+            gyroDrive(0.6, 55, 0);
+            connectionSleep(500);
+            gyroTurn(0.45, 0);
 
-        }
-        else if (labelProcessing == ImageProccessingOpenCV.LabelProcessing.TWO)
-        {
+        } else if (labelProcessing == ImageProccessingOpenCV.LabelProcessing.TWO) {
 
-            gyroTurn(0.4, 90);
-            sleep(500);
+            gyroTurn(0.45, 90);
+            connectionSleep(500);
             gyroDrive(0.6, 12, 90);
-            sleep(500);
-            gyroTurn(0.4, 0);
-            sleep(500);
-            gyroDrive(0.6, 50, 0);
-            sleep(500);
-        }
-        else {
-            gyroTurn(0.4, -90);
-            sleep(500);
+            connectionSleep(500);
+            gyroTurn(0.45, 0);
+            connectionSleep(500);
+            gyroDrive(0.6, 55, 0);
+            connectionSleep(500);
+            gyroTurn(0.45, 0);
+        } else {
+            gyroTurn(0.45, -90);
+            connectionSleep(500);
             gyroDrive(0.6, 30, -90);
-            sleep(500);
-            gyroTurn(0.4, 0);
-            sleep(500);
-            gyroDrive(0.6, 50, 0);
-            sleep(500);
+            connectionSleep(500);
+            gyroTurn(0.45, 0);
+            connectionSleep(500);
+            gyroDrive(0.6, 55, 0);
+            connectionSleep(500);
+            gyroTurn(0.45, 0);
 
+        }
+    }
+    public void connectionSleep (long milliseconds)
+    {
+        if ((opModeIsActive()) && (!isStopRequested()))
+        {
+            sleep(milliseconds);
+        }
+        else
+        {
+            robot.setLeft_frontDrive(0);
+            robot.setRight_frontDrive(0);
+            robot.setLeft_backDrive(0);
+            robot.setRight_backDrive(0);
         }
     }
 
@@ -177,11 +187,28 @@ public class GoToPositionAutonomousImageProccessingSleeve extends LinearOpMode {
 
     public void gyroTurn(double speed, double angle) {
         // keep looping while we are still active, and not on heading.
-        while (opModeIsActive() && !onHeading(speed, angle, P_TURN_COEFF, HEADING_THRESHOLD)) {
+        Log.d(TAG, "first turn, angle is" + angle);
+        while ((opModeIsActive()) && (!isStopRequested()) && (!onHeading(speed, angle, P_TURN_COEFF, 2))) {
             // Updates telemetry & Allow time for other processes to run.
             telemetry.update();
         }
+        connectionSleep(100);
+        Log.d(TAG, "second turn, angle is " + angle);
+        while ((opModeIsActive()) && (!isStopRequested()) && (!onHeading((speed/2), angle, 0.1, 1))) {
+            // Updates telemetry & Allow time for other processes to run.
+            telemetry.update();
+        }
+        Log.d(TAG, "finish turn, angle is " + angle);
+
+        robot.setLeft_frontDrive(0);
+        robot.setRight_frontDrive(0);
+        robot.setLeft_backDrive(0);
+        robot.setRight_backDrive(0);
+        Log.d(TAG, "stop turn");
+
         Log.d(TAG, "The angle is " + robot.GetImuAngle());
+
+
 
     }
 
@@ -204,6 +231,17 @@ public class GoToPositionAutonomousImageProccessingSleeve extends LinearOpMode {
         } else {
             steer = getSteer(error, PCoeff);
             rightSpeed = speed * steer;
+            if (Math.abs(rightSpeed) < 0.25)
+            {
+                if (rightSpeed < 0)
+                {
+                    rightSpeed = -0.25;
+                }
+                else
+                {
+                    rightSpeed = 0.25;
+                }
+            }
             leftSpeed = -rightSpeed;
         }
 
@@ -236,8 +274,8 @@ public class GoToPositionAutonomousImageProccessingSleeve extends LinearOpMode {
         robotError = targetAngle - robot.GetImuAngle();
         Log.d(TAG, "target angle is " + targetAngle);
         Log.d(TAG, "angle is " + gyroAngle);
-        while (robotError > 180) robotError -= 360;
-        while (robotError <= -180) robotError += 360;
+        while (robotError > 180 && (opModeIsActive()) && (!isStopRequested())) robotError -= 360;
+        while (robotError <= -180 && (opModeIsActive()) && (!isStopRequested())) robotError += 360;
         return robotError;
     }
 
@@ -268,12 +306,18 @@ public class GoToPositionAutonomousImageProccessingSleeve extends LinearOpMode {
 
 
         // Ensure that the opmode is still active
-        if (opModeIsActive()) {
+        if ((opModeIsActive()) && (!isStopRequested())) {
 
             robot.resetEncoderLeft_frontDrive();
             robot.resetEncoderRight_frontDrive();
             robot.resetEncoderLeft_backDrive();
             robot.resetEncoderRight_backDrive();
+
+            robot.Left_frontDriveUsingEncoder();
+            robot.Right_frontDriveUsingEncoder();
+            robot.Left_backDriveUsingEncoder();
+            robot.Right_backDriveUsingEncoder();
+
 
             distance = robot.cm_to_inch(distance);
             Log.d(TAG, "the distance is (inch) = " + distance);
@@ -284,16 +328,22 @@ public class GoToPositionAutonomousImageProccessingSleeve extends LinearOpMode {
             newLeftBTarget = robot.getEncoderPositionLeft_backDrive() + moveCounts;
             newRightBTarget = robot.getEncoderPositionRight_backDrive() + moveCounts;
 
+            Log.d(TAG, "newLeftFTarget is " + newLeftFTarget);
+            Log.d(TAG, "newRightFTarget is " + newRightFTarget);
+            Log.d(TAG, "newLeftBTarget is " + newLeftBTarget);
+            Log.d(TAG, "newRightBTarget is " + newRightBTarget);
+
+
             // Set Target and Turn On RUN_TO_POSITION
             robot.Left_frontDriveSetTargetPosition(newLeftFTarget);
             robot.Right_frontDriveSetTargetPosition(newRightFTarget);
             robot.Left_backDriveSetTargetPosition(newLeftBTarget);
             robot.Right_backDriveSetTargetPosition(newRightBTarget);
 
-            //robot.Left_frontDriveUsingEncoder();
-            //robot.Right_frontDriveUsingEncoder();
-            //robot.Left_backDriveUsingEncoder();
-            //robot.Right_backDriveUsingEncoder();
+            robot.Left_frontDriveToPosition();
+            robot.Right_frontDriveToPosition();
+            robot.Left_backDriveToPosition();
+            robot.Right_backDriveToPosition();
 
             // start motion.
             speed = Range.clip(Math.abs(speed), 0.0, 1.0);
@@ -313,10 +363,10 @@ public class GoToPositionAutonomousImageProccessingSleeve extends LinearOpMode {
 
 
             // keep looping while we are still active, and BOTH motors are running.
-            while (opModeIsActive() &&
-                    //(robot.Left_frontDriveIsBusy() && robot.Right_frontDriveIsBusy() && robot.Left_backDriveIsBusy() && robot.Right_backDriveIsBusy())) {
-                (rangLeftDriveF > 150) && (rangRightDriveF > 150) && (rangLeftDriveB > 150) && (rangRightDriveB > 150))
-                {
+            while ((opModeIsActive()) && (!isStopRequested()) &&
+                    (robot.Left_frontDriveIsBusy() == true && robot.Right_frontDriveIsBusy() == true
+                            && robot.Left_backDriveIsBusy() == true && robot.Right_backDriveIsBusy() == true)) {
+                //(rangLeftDriveF > 150) && (rangRightDriveF > 150) && (rangLeftDriveB > 150) && (rangRightDriveB > 150))
 
                     // adjust relative speed based on heading error.
                     error = getError(angle);
@@ -368,11 +418,25 @@ public class GoToPositionAutonomousImageProccessingSleeve extends LinearOpMode {
 
                 }
 
+                /*f (robot.Left_frontDriveIsBusy() == false) {
+                    Log.d(TAG, "left front drive is not busy");
+                }
+                else if (robot.Right_frontDriveIsBusy() == false) {
+                    Log.d(TAG, "right front drive is not busy");
+                }
+                else if (robot.Left_backDriveIsBusy() == false) {
+                    Log.d(TAG, "left back drive is not busy");
+                }
+                else if (robot.Right_backDriveIsBusy() == false) {
+                    Log.d(TAG, "right back drive is not busy");
+                }*/
+
                 // Stop all motion;
                 robot.setLeft_frontDrive(0);
                 robot.setRight_frontDrive(0);
                 robot.setLeft_backDrive(0);
                 robot.setRight_backDrive(0);
+                Log.d(TAG, "stop drive");
 
                 // Turn off RUN_TO_POSITION
                 robot.Left_frontDriveUsingEncoder();
@@ -380,17 +444,25 @@ public class GoToPositionAutonomousImageProccessingSleeve extends LinearOpMode {
                 robot.Left_backDriveUsingEncoder();
                 robot.Right_backDriveUsingEncoder();
             }
+        else
+        {
+            robot.setLeft_frontDrive(0);
+            robot.setRight_frontDrive(0);
+            robot.setLeft_backDrive(0);
+            robot.setRight_backDrive(0);
         }
-
-    public void sideDriveAutonomous (double speed)
-    {
-        robot.sideDrive(speed);
-        Log.d(TAG, "speed is " + speed);
-        Log.d(TAG, "Actual" + " , " + robot.getEncoderPositionLeft_frontDrive() + " , " + robot.getEncoderPositionRight_frontDrive());
-        Log.d(TAG, "Actual" + " , " + robot.getEncoderPositionLeft_backDrive() + " , " + robot.getEncoderPositionRight_backDrive());
-
     }
-}
+
+        public void sideDriveAutonomous ( double speed)
+        {
+            robot.sideDrive(speed);
+            Log.d(TAG, "speed is " + speed);
+            Log.d(TAG, "Actual" + " , " + robot.getEncoderPositionLeft_frontDrive() + " , " + robot.getEncoderPositionRight_frontDrive());
+            Log.d(TAG, "Actual" + " , " + robot.getEncoderPositionLeft_backDrive() + " , " + robot.getEncoderPositionRight_backDrive());
+
+        }
+    }
+
 
 
 

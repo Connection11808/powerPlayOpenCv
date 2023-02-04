@@ -32,6 +32,11 @@ public class ImageProccessingOpenCV {
     private double maxAreaBlue = 0;
     private double maxAreaRed = 0;
     private double maxAreaGreen = 0;
+    private Mat draw = null;
+    private boolean stopRobot = false;
+    private Scalar colorRed = null;
+    private Scalar colorBlue = null;
+    private Scalar colorGreen = null;
 
     GripPipelineBlue gripPipelineBlue;
     GripPipelineRed gripPipelineRed;
@@ -52,6 +57,10 @@ public class ImageProccessingOpenCV {
         gripPipelineBlue = new GripPipelineBlue();
         gripPipelineRed = new GripPipelineRed();
         gripPipelineGreen = new GripPipelineGreen();
+        colorRed = new Scalar(255, 0, 0);
+        colorGreen = new Scalar(0, 255, 0);
+        colorBlue = new Scalar(0, 0, 255);
+
 
 
         /*
@@ -78,6 +87,7 @@ public class ImageProccessingOpenCV {
          */
 
         webcam.setPipeline(new SamplePipeline());
+        webcam.stopRecordingPipeline();
 
         /*
          * Open the connection to the camera device. New in v1.4.0 is the ability
@@ -145,6 +155,14 @@ public class ImageProccessingOpenCV {
     {
         labelProcessing = null;
         findColorObject = false;
+        stopRobot = false;
+    }
+
+    public void StopRobot ()
+    {
+        stopRobot = true;
+        webcam.stopRecordingPipeline();
+        webcam.stopStreaming();
     }
 
     class SamplePipeline extends OpenCvPipeline
@@ -176,111 +194,100 @@ public class ImageProccessingOpenCV {
              */
 
             Mat output;
+            if (true == stopRobot)
+            {
+                draw = input;
+            }
+            else {
+                //Log.d(TAG, "stat frame..");
+                findColorObject = false;
+                maxAreaBlue = 0;
+                maxAreaRed = 0;
+                maxAreaGreen = 0;
 
-            //Log.d(TAG, "stat frame..");
-            findColorObject = false;
-            maxAreaBlue = 0;
-            maxAreaRed = 0;
-            maxAreaGreen = 0;
-            output = gripPipelineBlue.process(input);
-            output = gripPipelineRed.process(input);
-            output = gripPipelineGreen.process(input);
+                output = gripPipelineBlue.process(input.clone());
+                output = gripPipelineRed.process(input.clone());
+                output = gripPipelineGreen.process(input.clone());
 
-            Mat draw = Mat.zeros(input.size(), CvType.CV_8UC3);
-            if ((gripPipelineBlue.getFindContoursOutput() != null) && (!findColorObject)) {
-                int blueSize = gripPipelineBlue.getFindContoursOutput().size();
-                Log.d(TAG, "Blue size is " + blueSize);
+                draw = Mat.zeros(input.size(), CvType.CV_8UC3);
+                if ((gripPipelineBlue.getFindContoursOutput() != null) && (!findColorObject)) {
+                    int blueSize = gripPipelineBlue.getFindContoursOutput().size();
+                    Log.d(TAG, "Blue size is " + blueSize);
 
-                for (int i = 0; i < blueSize; i++) {
-                    // Calculating the area
-                    Scalar color = new Scalar(0, 0, 255);
-                    Imgproc.drawContours(draw, gripPipelineBlue.getFindContoursOutput(), i, color, 2,
-                            Imgproc.LINE_8, gripPipelineBlue.hierarchy, 2, new Point() ) ;
-                    Log.d(TAG, "Blue area ["+ i + "] = "+ Imgproc.contourArea(gripPipelineBlue.getFindContoursOutput().get(i)));
-                    if (Imgproc.contourArea(gripPipelineBlue.getFindContoursOutput().get(i)) > maxAreaBlue)
-                    {
-                        maxAreaBlue = Imgproc.contourArea(gripPipelineBlue.getFindContoursOutput().get(i));
+                    for (int i = 0; i < blueSize; i++) {
+                        // Calculating the area
+                        Imgproc.drawContours(draw, gripPipelineBlue.getFindContoursOutput(), i, colorBlue, 2,
+                                Imgproc.LINE_8, gripPipelineBlue.hierarchy, 2, new Point());
+                        Log.d(TAG, "Blue area [" + i + "] = " + Imgproc.contourArea(gripPipelineBlue.getFindContoursOutput().get(i)));
+                        if (Imgproc.contourArea(gripPipelineBlue.getFindContoursOutput().get(i)) > maxAreaBlue) {
+                            maxAreaBlue = Imgproc.contourArea(gripPipelineBlue.getFindContoursOutput().get(i));
+                        }
+                    }
+
+
+                    if (maxAreaBlue > 200) {
+                        findColorObject = true;
+                        labelProcessing = LabelProcessing.THREE;
+                        Log.d(TAG, "findColorObject blue is true");
+                    } else {
+                        findColorObject = false;
+                        Log.d(TAG, "findColorObject blue is false");
                     }
                 }
 
+                if ((gripPipelineRed.getFindContoursOutput() != null) && (!findColorObject)) {
+                    int redSize = gripPipelineRed.getFindContoursOutput().size();
+                    Log.d(TAG, "Red size is " + redSize);
 
-                if (maxAreaBlue > 200)
-                {
-                    findColorObject = true;
-                    labelProcessing = LabelProcessing.THREE;
-                    Log.d(TAG, "findColorObject blue is true");
+                    for (int i = 0; i < redSize; i++) {
+                        // Calculating the area
+                        Imgproc.drawContours(draw, gripPipelineRed.getFindContoursOutput(), i, colorRed, 2,
+                                Imgproc.LINE_8, gripPipelineRed.hierarchy, 2, new Point());
+                        Log.d(TAG, "Red area [" + i + "] = " + Imgproc.contourArea(gripPipelineRed.getFindContoursOutput().get(i)));
+                        if (Imgproc.contourArea(gripPipelineRed.getFindContoursOutput().get(i)) > maxAreaRed) {
+                            maxAreaRed = Imgproc.contourArea(gripPipelineRed.getFindContoursOutput().get(i));
+                        }
+                    }
+
+                    if (maxAreaRed > 400) {
+                        findColorObject = true;
+                        labelProcessing = LabelProcessing.ONE;
+                        Log.d(TAG, "findColorObject red is true");
+                    } else {
+                        findColorObject = false;
+                        Log.d(TAG, "findColorObject red is false");
+                    }
                 }
-                else
-                {
-                    findColorObject = false;
-                    Log.d(TAG, "findColorObject blue is false");
-                }
-            }
+                if ((gripPipelineGreen.getFindContoursOutput() != null) && (!findColorObject)) {
+                    int greenSize = gripPipelineGreen.getFindContoursOutput().size();
+                    Log.d(TAG, "Green size is " + gripPipelineGreen.getFindContoursOutput().size());
 
-            if ((gripPipelineRed.getFindContoursOutput() != null) && (!findColorObject)) {
-                int redSize = gripPipelineRed.getFindContoursOutput().size();
-                Log.d(TAG, "Red size is " + redSize);
+                    for (int i = 0; i < greenSize; i++) {
+                        // Calculating the area
+                        Imgproc.drawContours(draw, gripPipelineGreen.getFindContoursOutput(), i, colorGreen, 2,
+                                Imgproc.LINE_8, gripPipelineGreen.hierarchy, 2, new Point());
+                        Log.d(TAG, "Green area [" + i + "] = " + Imgproc.contourArea(gripPipelineGreen.getFindContoursOutput().get(i)));
+                        if (Imgproc.contourArea(gripPipelineGreen.getFindContoursOutput().get(i)) > maxAreaGreen) {
+                            maxAreaGreen = Imgproc.contourArea(gripPipelineGreen.getFindContoursOutput().get(i));
+                        }
+                    }
 
-                for (int i = 0; i < redSize; i++) {
-                    // Calculating the area
-                    Scalar color = new Scalar(255, 0, 0);
-                    Imgproc.drawContours(draw, gripPipelineRed.getFindContoursOutput(), i, color, 2,
-                            Imgproc.LINE_8, gripPipelineRed.hierarchy, 2, new Point() ) ;
-                    Log.d(TAG, "Red area ["+ i + "] = "+ Imgproc.contourArea(gripPipelineRed.getFindContoursOutput().get(i)));
-                    if (Imgproc.contourArea(gripPipelineRed.getFindContoursOutput().get(i)) > maxAreaRed)
-                    {
-                        maxAreaRed = Imgproc.contourArea(gripPipelineRed.getFindContoursOutput().get(i));
+                    if (maxAreaGreen > 500) {
+                        findColorObject = true;
+                        labelProcessing = LabelProcessing.TWO;
+                        Log.d(TAG, "findColorObject green is true");
+                    } else {
+                        findColorObject = false;
+                        Log.d(TAG, "findColorObject green is false");
                     }
                 }
 
-                if (maxAreaRed > 850)
-                {
-                    findColorObject = true;
-                    labelProcessing = LabelProcessing.ONE;
-                    Log.d(TAG, "findColorObject red is true");
-                }
-                else
-                {
-                    findColorObject = false;
-                    Log.d(TAG, "findColorObject red is false");
-                }
+                /**
+                 * NOTE: to see how to get data from your pipeline to your OpMode as well as how
+                 * to change which stage of the pipeline is rendered to the viewport when it is
+                 * tapped, please see {@link PipelineStageSwitchingExample}
+                 */
             }
-            if ((gripPipelineGreen.getFindContoursOutput() != null) && (!findColorObject)) {
-                int greenSize = gripPipelineGreen.getFindContoursOutput().size();
-                Log.d(TAG, "Green size is " +gripPipelineGreen.getFindContoursOutput().size());
-
-                for (int i = 0; i < greenSize; i++) {
-                    // Calculating the area
-                    Scalar color = new Scalar(0, 255, 0);
-                    Imgproc.drawContours(draw, gripPipelineGreen.getFindContoursOutput(), i, color, 2,
-                            Imgproc.LINE_8, gripPipelineGreen.hierarchy, 2, new Point() ) ;
-                    Log.d(TAG, "Green area ["+ i + "] = "+ Imgproc.contourArea(gripPipelineGreen.getFindContoursOutput().get(i)));
-                    if (Imgproc.contourArea(gripPipelineGreen.getFindContoursOutput().get(i)) > maxAreaGreen)
-                    {
-                        maxAreaGreen = Imgproc.contourArea(gripPipelineGreen.getFindContoursOutput().get(i));
-                    }
-                }
-
-                if (maxAreaGreen > 850)
-                {
-                    findColorObject = true;
-                    labelProcessing = LabelProcessing.TWO;
-                    Log.d(TAG, "findColorObject green is true");
-                }
-
-                else
-                {
-                    findColorObject = false;
-                    Log.d(TAG, "findColorObject green is false");
-                }
-            }
-
-            /**
-             * NOTE: to see how to get data from your pipeline to your OpMode as well as how
-             * to change which stage of the pipeline is rendered to the viewport when it is
-             * tapped, please see {@link PipelineStageSwitchingExample}
-             */
-
             return draw;
         }
 

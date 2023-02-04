@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.Autonomous;
 import android.util.Log;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
@@ -10,25 +11,26 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.teamcode.Hardware.ConnectionHardware;
 import org.firstinspires.ftc.teamcode.ImageProcessing.ImageProccessingOpenCV;
 
-@Autonomous(name="AutonomousForward", group="Robot")
-public class AutonomousForward extends LinearOpMode {
+@Autonomous(name="rectangleAutonomous", group="Robot")
+@Disabled
+public class rectangleAutonomous extends LinearOpMode {
 
 
     ConnectionHardware robot = new ConnectionHardware();
     ImageProccessingOpenCV imageProccessingOpenCV = new ImageProccessingOpenCV();
     private ElapsedTime runtime = new ElapsedTime();
-    private String TAG = "AutonomousConnectionImageProccessing";
+    private String TAG = "rectangleAutonomous";
     private ImageProccessingOpenCV.LabelProcessing labelProcessing = null;
 
 
     static final double COUNTS_PER_MOTOR_REV = (134.4 * 4);  // PPR is 134.4 ; CPR = PPR * 4 for 1:20 Motor
-    static final double DRIVE_GEAR_REDUCTION = (16.0/18.0);     // No External Gearing.
+    static final double DRIVE_GEAR_REDUCTION = (16.0 / 18.0);     // No External Gearing.
     static final double WHEEL_DIAMETER_INCHES = 4.0;     // For figuring circumference
     static final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
             (WHEEL_DIAMETER_INCHES * 3.1415);
     static final double DRIVE_SPEED = 0.6;
     static final double TURN_SPEED = 0.5;
-    static final double P_TURN_COEFF = 0.05;     // Larger is more responsive, but also less stable
+    static final double P_TURN_COEFF = 0.08;     // Larger is more responsive, but also less stable
     static final double P_DRIVE_COEFF = 0.03;     // Larger is more responsive, but also less stable
     static final double HEADING_THRESHOLD = 1;      // As tight as we can make it with an integer gyro
 
@@ -48,25 +50,7 @@ public class AutonomousForward extends LinearOpMode {
         telemetry.update();
 
         waitForStart();
-        runtime.reset();
-        while ((labelProcessing == null) && (opModeIsActive()) && (runtime.seconds() <= 5)) {
-            labelProcessing = imageProccessingOpenCV.FindLabelProcessingOpenCV();
-            Log.d(TAG, "Label Processing is = " + labelProcessing);
-            Log.d(TAG, "timer is = " + runtime.seconds());
-            if (labelProcessing != null) {
-                telemetry.addData("Label Processing is = ", labelProcessing);
-                telemetry.update();
-            }
-        }
-        if (labelProcessing == null)
-        {
-            labelProcessing = ImageProccessingOpenCV.LabelProcessing.ONE;
-            telemetry.addLine("Image Processing not found label; select ONE");
-            telemetry.update();
-        }
-        imageProccessingOpenCV.StopRobot();
-
-        /*gyroDrive(0.4, 140, 0);
+        gyroDrive(0.4, 140, 0);
         sleep(500);
         gyroTurn(0.3, -90);
         sleep(500);
@@ -80,47 +64,41 @@ public class AutonomousForward extends LinearOpMode {
         sleep(500);
         gyroDrive(0.4, 55, -270);
         gyroTurn(0.3, 0);
-        gyroTurn(0.3, 0);*/
+        gyroTurn(0.3, 0);
 
-        if (labelProcessing == ImageProccessingOpenCV.LabelProcessing.ONE)
-        {
-            Log.d(TAG, "It is " + labelProcessing);
-            telemetry.addLine("It is ONE");
-            sleep(500);
-            driveToTheSleeveParking();
 
-        }
-        else if (labelProcessing == ImageProccessingOpenCV.LabelProcessing.TWO)
-        {
-            Log.d(TAG, "It is " + labelProcessing);
-            telemetry.addLine("It is TWO");
-            sleep(500);
-            driveToTheSleeveParking();
-
-        }
-        else {
-            Log.d(TAG, "It is " + labelProcessing);
-            telemetry.addLine("It is THREE");
-            sleep(500);
-            driveToTheSleeveParking();
-
-        }
-
-        while(opModeIsActive());
     }
 
     public void driveToTheSleeveParking() {
-        if (labelProcessing == ImageProccessingOpenCV.LabelProcessing.ONE)
-        {
+        if (labelProcessing == ImageProccessingOpenCV.LabelProcessing.ONE) {
+            gyroTurn(0.6, 90);
+            sleep(500);
+            gyroDrive(0.6, 47, 90);
+            sleep(500);
+            gyroTurn(0.6, 0);
+            sleep(500);
             gyroDrive(0.6, 55, 0);
+            sleep(500);
 
-        }
-        else if (labelProcessing == ImageProccessingOpenCV.LabelProcessing.TWO)
-        {
+        } else if (labelProcessing == ImageProccessingOpenCV.LabelProcessing.TWO) {
+
+            gyroTurn(0.6, 90);
+            sleep(500);
+            gyroDrive(0.6, 12, 90);
+            sleep(500);
+            gyroTurn(0.6, 0);
+            sleep(500);
             gyroDrive(0.6, 55, 0);
-        }
-        else {
+            sleep(500);
+        } else {
+            gyroTurn(0.6, -90);
+            sleep(500);
+            gyroDrive(0.6, 30, -90);
+            sleep(500);
+            gyroTurn(0.6, 0);
+            sleep(500);
             gyroDrive(0.6, 55, 0);
+            sleep(500);
 
         }
     }
@@ -250,6 +228,11 @@ public class AutonomousForward extends LinearOpMode {
             robot.resetEncoderLeft_backDrive();
             robot.resetEncoderRight_backDrive();
 
+            robot.Left_frontDriveUsingEncoder();
+            robot.Right_frontDriveUsingEncoder();
+            robot.Left_backDriveUsingEncoder();
+            robot.Right_backDriveUsingEncoder();
+
             distance = robot.cm_to_inch(distance);
             Log.d(TAG, "the distance is (inch) = " + distance);
             // Determine new target position, and pass to motor controller
@@ -259,16 +242,21 @@ public class AutonomousForward extends LinearOpMode {
             newLeftBTarget = robot.getEncoderPositionLeft_backDrive() + moveCounts;
             newRightBTarget = robot.getEncoderPositionRight_backDrive() + moveCounts;
 
+            Log.d(TAG, "newLeftFTarget is " + newLeftFTarget);
+            Log.d(TAG, "newRightFTarget is " + newRightFTarget);
+            Log.d(TAG, "newLeftBTarget is " + newLeftBTarget);
+            Log.d(TAG, "newRightBTarget is " + newRightBTarget);
+
             // Set Target and Turn On RUN_TO_POSITION
             robot.Left_frontDriveSetTargetPosition(newLeftFTarget);
             robot.Right_frontDriveSetTargetPosition(newRightFTarget);
             robot.Left_backDriveSetTargetPosition(newLeftBTarget);
             robot.Right_backDriveSetTargetPosition(newRightBTarget);
 
-            //robot.Left_frontDriveUsingEncoder();
-            //robot.Right_frontDriveUsingEncoder();
-            //robot.Left_backDriveUsingEncoder();
-            //robot.Right_backDriveUsingEncoder();
+            robot.Left_frontDriveToPosition();
+            robot.Right_frontDriveToPosition();
+            robot.Left_backDriveToPosition();
+            robot.Right_backDriveToPosition();
 
             // start motion.
             speed = Range.clip(Math.abs(speed), 0.0, 1.0);
@@ -289,9 +277,8 @@ public class AutonomousForward extends LinearOpMode {
 
             // keep looping while we are still active, and BOTH motors are running.
             while (opModeIsActive() &&
-                    //(robot.Left_frontDriveIsBusy() && robot.Right_frontDriveIsBusy() && robot.Left_backDriveIsBusy() && robot.Right_backDriveIsBusy())) {
-                (rangLeftDriveF > 150) && (rangRightDriveF > 150) && (rangLeftDriveB > 150) && (rangRightDriveB > 150))
-                {
+                    (robot.Left_frontDriveIsBusy() && robot.Right_frontDriveIsBusy() && robot.Left_backDriveIsBusy() && robot.Right_backDriveIsBusy())) {
+                //(rangLeftDriveF > 150) && (rangRightDriveF > 150) && (rangLeftDriveB > 150) && (rangRightDriveB > 150))
 
                     // adjust relative speed based on heading error.
                     error = getError(angle);
@@ -348,6 +335,7 @@ public class AutonomousForward extends LinearOpMode {
                 robot.setRight_frontDrive(0);
                 robot.setLeft_backDrive(0);
                 robot.setRight_backDrive(0);
+                Log.d(TAG, "stop drive");
 
                 // Turn off RUN_TO_POSITION
                 robot.Left_frontDriveUsingEncoder();
@@ -357,15 +345,16 @@ public class AutonomousForward extends LinearOpMode {
             }
         }
 
-    public void sideDriveAutonomous (double speed)
-    {
-        robot.sideDrive(speed);
-        Log.d(TAG, "speed is " + speed);
-        Log.d(TAG, "Actual" + " , " + robot.getEncoderPositionLeft_frontDrive() + " , " + robot.getEncoderPositionRight_frontDrive());
-        Log.d(TAG, "Actual" + " , " + robot.getEncoderPositionLeft_backDrive() + " , " + robot.getEncoderPositionRight_backDrive());
+        public void sideDriveAutonomous ( double speed)
+        {
+            robot.sideDrive(speed);
+            Log.d(TAG, "speed is " + speed);
+            Log.d(TAG, "Actual" + " , " + robot.getEncoderPositionLeft_frontDrive() + " , " + robot.getEncoderPositionRight_frontDrive());
+            Log.d(TAG, "Actual" + " , " + robot.getEncoderPositionLeft_backDrive() + " , " + robot.getEncoderPositionRight_backDrive());
 
+        }
     }
-}
+
 
 
 
