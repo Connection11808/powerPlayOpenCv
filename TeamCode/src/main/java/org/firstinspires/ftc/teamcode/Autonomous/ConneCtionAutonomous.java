@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.Autonomous;
 import android.util.Log;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -12,6 +13,7 @@ import org.firstinspires.ftc.teamcode.Hardware.ConnectionHardware;
 import org.firstinspires.ftc.teamcode.ImageProcessing.ImageProccessingOpenCV;
 
 @Autonomous(name="ConneCtionAutonomous", group="Robot")
+@Disabled
 public class ConneCtionAutonomous extends LinearOpMode {
 
 
@@ -113,12 +115,12 @@ public class ConneCtionAutonomous extends LinearOpMode {
             Log.d(TAG, "elevator encoder is " + robot.getEncoderPositionElivatorMotor());
         }
         connectionSleep(sleepMsec);
-        gyroDrive(0.4, 3, -45);
+        gyroDrive(0.4, 5, -45);
         connectionSleep(sleepMsec);
         gyroTurn(0.45, -37);
         connectionSleep(sleepMsec);
-        robot.elevatorMotor.setTargetPosition(1500);
-        if(robot.elevatorMotor.getCurrentPosition() > 1500){
+        robot.elevatorMotor.setTargetPosition(1480);
+        if(robot.elevatorMotor.getCurrentPosition() > 1480){
             elevatorPower = elevatorPower * -1;
         }
         robot.elevatorMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -140,7 +142,7 @@ public class ConneCtionAutonomous extends LinearOpMode {
         robot.elevatorMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.elevatorMotor.setPower(elevatorPower);
         connectionSleep(sleepMsec);
-        gyroDrive(0.6, 54, -180);
+        gyroDrive(0.6, 45, -180);
         connectionSleep(sleepMsec);
         robot.setCatchTheConeMotor(1.0);
         connectionSleep(sleepMsec);
