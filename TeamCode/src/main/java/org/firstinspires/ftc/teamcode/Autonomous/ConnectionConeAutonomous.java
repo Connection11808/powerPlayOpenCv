@@ -55,154 +55,151 @@ public class ConnectionConeAutonomous extends LinearOpMode {
         telemetry.update();
 
         waitForStart();
-        runtime.reset();
-        Log.d(TAG, "start...");
-        imageProccessingOpenCV.LabelProcessingInit();
-        //sleep(2000);
-        while ((labelProcessing == null) && (opModeIsActive()) && (!isStopRequested()) && (runtime.seconds() <= 5)) {
-            labelProcessing = imageProccessingOpenCV.FindLabelProcessingOpenCV();
-            Log.d(TAG, "Label Processing is = " + labelProcessing);
-            Log.d(TAG, "timer is = " + runtime.seconds());
-            if (labelProcessing != null) {
-                telemetry.addData("Label Processing is = ", labelProcessing);
+        if (false == opModeIsActive())
+        {
+            Log.d(TAG, "Stop!!!");
+            //imageProccessingOpenCV.StopRobot();
+        }
+        else
+        {
+            Log.d(TAG, "start...");
+            imageProccessingOpenCV.LabelProcessingInit();
+            runtime.reset();
+            while ((labelProcessing == null) && (opModeIsActive()) && (!isStopRequested()) && (runtime.seconds() <= 5)) {
+                labelProcessing = imageProccessingOpenCV.FindLabelProcessingOpenCV();
+                Log.d(TAG, "Label Processing is = " + labelProcessing);
+                Log.d(TAG, "timer is = " + runtime.seconds());
+                if (labelProcessing != null) {
+                    telemetry.addData("Label Processing is = ", labelProcessing);
+                    telemetry.update();
+                }
+                connectionSleep(200);
+            }
+            if (labelProcessing == null) {
+                labelProcessing = ImageProccessingOpenCV.LabelProcessing.TWO;
+                telemetry.addLine("Image Processing not found label; select TWO");
                 telemetry.update();
             }
-            connectionSleep(200);
-        }
-        if (labelProcessing == null) {
-            labelProcessing = ImageProccessingOpenCV.LabelProcessing.TWO;
-            telemetry.addLine("Image Processing not found label; select TWO");
-            telemetry.update();
-        }
-        imageProccessingOpenCV.StopRobot();
+            imageProccessingOpenCV.StopRobot();
 
-        robot.setTuningClawMotor(0.05);
-        robot.arm_motor.setTargetPosition(257);
-        if(robot.arm_motor.getCurrentPosition() > 257){
-            armPower = armPower * -1;
-        }
-        robot.arm_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.arm_motor.setPower(armPower);
-        runtime.reset();
-        Log.d(TAG_E, "armMotor target position is: " +  robot.arm_motor.getTargetPosition());
-        while ((opModeIsActive()) && (robot.ArmMotorIsBusy()) && (runtime.seconds() <= 3))
-        {
-            Log.d(TAG_E, "arm encoder is " + robot.getEncoderPositionArmMotor());
-        }
-        Log.d(TAG_E, "time out arm end is: " + runtime.seconds());
-        connectionSleep(sleepMsec);
-        gyroTurn(TURN_SPEED, -90);
-        connectionSleep(sleepMsec);
-        gyroDrive(DRIVE_SPEED, 35, -90);
-        connectionSleep(sleepMsec);
-        gyroTurn(TURN_SPEED, 0);
-        connectionSleep(sleepMsec);
-        gyroDrive(DRIVE_SPEED, 100, 0);
-        connectionSleep(sleepMsec);
-        gyroTurn(TURN_SPEED, 0);
-        connectionSleep(sleepMsec);
-        gyroTurn(TURN_SPEED, coneAngle);
-        connectionSleep(sleepMsec);
-        gyroTurn(TURN_SPEED, coneAngle);
-        connectionSleep(sleepMsec);
-        robot.elevatorMotor.setTargetPosition(1828); //1828
-        if(robot.elevatorMotor.getCurrentPosition() > 1828){ //1828
-            elevatorPower = elevatorPower * -1;
-        }
-        robot.elevatorMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.elevatorMotor.setPower(elevatorPower);
-        runtime.reset();
-        Log.d(TAG_E, "elevatorMotor target position is: " +  robot.elevatorMotor.getTargetPosition());
-        while ((opModeIsActive()) && (robot.ElivatorMotorIsBusy()) && (runtime.seconds() <= timeout))
-        {
-            Log.d(TAG_E, "elevator encoder is " + robot.getEncoderPositionElivatorMotor());
-        }
-        Log.d(TAG_E, "time out elevator end is: " + runtime.seconds());
-        connectionSleep(sleepMsec);
-        gyroDrive(SECOND_DRIVE_SPEED, 10, coneAngle);
-        connectionSleep(sleepMsec);
-        robot.elevatorMotor.setTargetPosition(1480);
-        if(robot.elevatorMotor.getCurrentPosition() > 1480){
-            elevatorPower = elevatorPower * -1;
-        }
-        robot.elevatorMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.elevatorMotor.setPower(elevatorPower);
-        runtime.reset();
-        Log.d(TAG_E, "elevatorMotor target position is: " +  robot.elevatorMotor.getTargetPosition());
-        while ((opModeIsActive()) && (robot.ElivatorMotorIsBusy()) && (runtime.seconds() <= timeout))
-        {
-            Log.d(TAG_E, "elevator encoder is " + robot.getEncoderPositionElivatorMotor());
-        }
-        Log.d(TAG_E, "time out elevator end is: " + runtime.seconds());
-        connectionSleep(sleepMsec);
-        robot.setCatchTheConeMotor(0.6);
-        connectionSleep(sleepMsec);
-        gyroDrive(DRIVE_SPEED, -7, coneAngle);
-        connectionSleep(sleepMsec);
-        robot.setCatchTheConeMotor(1.0);
-        connectionSleep(sleepMsec);
-        robot.elevatorMotor.setTargetPosition(200);
-        if(robot.elevatorMotor.getCurrentPosition() > 200){
-            elevatorPower = elevatorPower * -1;
-        }
-        robot.elevatorMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.elevatorMotor.setPower(elevatorPower);
-        runtime.reset();
-        Log.d(TAG_E, "elevatorMotor target position is: " +  robot.elevatorMotor.getTargetPosition());
-        while ((opModeIsActive()) && (robot.ElivatorMotorIsBusy()) && (runtime.seconds() <= timeout))
-        {
-            Log.d(TAG_E, "elevator encoder is " + robot.getEncoderPositionElivatorMotor());
-        }
-        Log.d(TAG_E, "time out elevator end is: " + runtime.seconds());
-        robot.setTuningClawMotor(0.25);
-        robot.arm_motor.setTargetPosition(43);
-        if(robot.arm_motor.getCurrentPosition() > 43){
-            armPower = armPower * -1;
-        }
-        robot.arm_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.arm_motor.setPower(armPower);
-        Log.d(TAG_E, "armMotor target position is: " +  robot.arm_motor.getTargetPosition());
-        while ((opModeIsActive()) && (robot.ArmMotorIsBusy()) && (runtime.seconds() <= timeout))
-        {
-            Log.d(TAG_E, "arm encoder is " + robot.getEncoderPositionArmMotor());
-        }
-        Log.d(TAG_E, "time out arm end is: " + runtime.seconds());
-        if (labelProcessing == ImageProccessingOpenCV.LabelProcessing.ONE) {
-            Log.d(TAG, "It is " + labelProcessing);
-            telemetry.addLine("It is ONE");
+            robot.setTuningClawMotor(0.05);
+            robot.arm_motor.setTargetPosition(257);
+            if (robot.arm_motor.getCurrentPosition() > 257) {
+                armPower = armPower * -1;
+            }
+            robot.arm_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.arm_motor.setPower(armPower);
+            runtime.reset();
+            Log.d(TAG_E, "armMotor target position is: " + robot.arm_motor.getTargetPosition());
+            while ((opModeIsActive()) && (robot.ArmMotorIsBusy()) && (runtime.seconds() <= 3)) {
+                Log.d(TAG_E, "arm encoder is " + robot.getEncoderPositionArmMotor());
+            }
+            Log.d(TAG_E, "time out arm end is: " + runtime.seconds());
             connectionSleep(sleepMsec);
-            gyroTurn(TURN_SPEED, 90);
+            gyroTurn(TURN_SPEED, -90);
             connectionSleep(sleepMsec);
-            gyroDrive(SECOND_DRIVE_SPEED, 98, 90);
-
-        }
-        else if (labelProcessing == ImageProccessingOpenCV.LabelProcessing.TWO)
-        {
-            Log.d(TAG, "It is " + labelProcessing);
-            telemetry.addLine("It is TWO");
-            gyroTurn(TURN_SPEED, 90);
-            connectionSleep(sleepMsec);
-            gyroDrive(SECOND_DRIVE_SPEED, 45, 90);
+            gyroDrive(DRIVE_SPEED, 35, -90);
             connectionSleep(sleepMsec);
             gyroTurn(TURN_SPEED, 0);
             connectionSleep(sleepMsec);
-            gyroTurn(TURN_SPEED, 0);
-
-        }
-        else {
-            Log.d(TAG, "It is " + labelProcessing);
-            telemetry.addLine("It is THREE");
-            gyroTurn(TURN_SPEED, 0);
-            connectionSleep(sleepMsec);
-            gyroDrive(SECOND_DRIVE_SPEED, -10, 0);
+            gyroDrive(DRIVE_SPEED, 100, 0);
             connectionSleep(sleepMsec);
             gyroTurn(TURN_SPEED, 0);
+            connectionSleep(sleepMsec);
+            gyroTurn(TURN_SPEED, coneAngle);
+            connectionSleep(sleepMsec);
+            gyroTurn(TURN_SPEED, coneAngle);
+            connectionSleep(sleepMsec);
+            robot.elevatorMotor.setTargetPosition(1828); //1828
+            if (robot.elevatorMotor.getCurrentPosition() > 1828) { //1828
+                elevatorPower = elevatorPower * -1;
+            }
+            robot.elevatorMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.elevatorMotor.setPower(elevatorPower);
+            runtime.reset();
+            Log.d(TAG_E, "elevatorMotor target position is: " + robot.elevatorMotor.getTargetPosition());
+            while ((opModeIsActive()) && (robot.ElivatorMotorIsBusy()) && (runtime.seconds() <= timeout)) {
+                Log.d(TAG_E, "elevator encoder is " + robot.getEncoderPositionElivatorMotor());
+            }
+            Log.d(TAG_E, "time out elevator end is: " + runtime.seconds());
+            connectionSleep(sleepMsec);
+            gyroDrive(SECOND_DRIVE_SPEED, 10, coneAngle);
+            connectionSleep(sleepMsec);
+            robot.elevatorMotor.setTargetPosition(1480);
+            if (robot.elevatorMotor.getCurrentPosition() > 1480) {
+                elevatorPower = elevatorPower * -1;
+            }
+            robot.elevatorMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.elevatorMotor.setPower(elevatorPower);
+            runtime.reset();
+            Log.d(TAG_E, "elevatorMotor target position is: " + robot.elevatorMotor.getTargetPosition());
+            while ((opModeIsActive()) && (robot.ElivatorMotorIsBusy()) && (runtime.seconds() <= timeout)) {
+                Log.d(TAG_E, "elevator encoder is " + robot.getEncoderPositionElivatorMotor());
+            }
+            Log.d(TAG_E, "time out elevator end is: " + runtime.seconds());
+            connectionSleep(sleepMsec);
+            robot.setCatchTheConeMotor(0.6);
+            connectionSleep(sleepMsec);
+            gyroDrive(DRIVE_SPEED, -7, coneAngle);
+            connectionSleep(sleepMsec);
+            robot.setCatchTheConeMotor(1.0);
+            connectionSleep(sleepMsec);
+            robot.elevatorMotor.setTargetPosition(200);
+            if (robot.elevatorMotor.getCurrentPosition() > 200) {
+                elevatorPower = elevatorPower * -1;
+            }
+            robot.elevatorMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.elevatorMotor.setPower(elevatorPower);
+            runtime.reset();
+            Log.d(TAG_E, "elevatorMotor target position is: " + robot.elevatorMotor.getTargetPosition());
+            while ((opModeIsActive()) && (robot.ElivatorMotorIsBusy()) && (runtime.seconds() <= timeout)) {
+                Log.d(TAG_E, "elevator encoder is " + robot.getEncoderPositionElivatorMotor());
+            }
+            Log.d(TAG_E, "time out elevator end is: " + runtime.seconds());
+            robot.setTuningClawMotor(0.25);
+            robot.arm_motor.setTargetPosition(43);
+            if (robot.arm_motor.getCurrentPosition() > 43) {
+                armPower = armPower * -1;
+            }
+            robot.arm_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.arm_motor.setPower(armPower);
+            Log.d(TAG_E, "armMotor target position is: " + robot.arm_motor.getTargetPosition());
+            while ((opModeIsActive()) && (robot.ArmMotorIsBusy()) && (runtime.seconds() <= timeout)) {
+                Log.d(TAG_E, "arm encoder is " + robot.getEncoderPositionArmMotor());
+            }
+            Log.d(TAG_E, "time out arm end is: " + runtime.seconds());
+            if (labelProcessing == ImageProccessingOpenCV.LabelProcessing.ONE) {
+                Log.d(TAG, "It is " + labelProcessing);
+                telemetry.addLine("It is ONE");
+                connectionSleep(sleepMsec);
+                gyroTurn(TURN_SPEED, 90);
+                connectionSleep(sleepMsec);
+                gyroDrive(SECOND_DRIVE_SPEED, 98, 90);
 
+            } else if (labelProcessing == ImageProccessingOpenCV.LabelProcessing.TWO) {
+                Log.d(TAG, "It is " + labelProcessing);
+                telemetry.addLine("It is TWO");
+                gyroTurn(TURN_SPEED, 90);
+                connectionSleep(sleepMsec);
+                gyroDrive(SECOND_DRIVE_SPEED, 45, 90);
+                connectionSleep(sleepMsec);
+                gyroTurn(TURN_SPEED, 0);
+                connectionSleep(sleepMsec);
+                gyroTurn(TURN_SPEED, 0);
+
+            } else {
+                Log.d(TAG, "It is " + labelProcessing);
+                telemetry.addLine("It is THREE");
+                gyroTurn(TURN_SPEED, 0);
+                connectionSleep(sleepMsec);
+                gyroDrive(SECOND_DRIVE_SPEED, -10, 0);
+                connectionSleep(sleepMsec);
+                gyroTurn(TURN_SPEED, 0);
+
+            }
+
+            while (opModeIsActive() && (!isStopRequested())) ;
         }
-
-
-
-        while (opModeIsActive() && (!isStopRequested())) ;
     }
 
     public void driveToTheSleeveParking() {

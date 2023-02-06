@@ -39,6 +39,12 @@ public class GripPipelineBlue {
 	private Mat cvErodeOutput = new Mat();
 	private Mat maskOutput = new Mat();
 	private ArrayList<MatOfPoint> findContoursOutput = new ArrayList<MatOfPoint>();
+	private double[] hsvThresholdHue = {87, 104};
+	private double[] hsvThresholdSaturation = {195, 255};
+	private double[] hsvThresholdValue = {94, 193};
+	private Point cvErodeAnchor = new Point(-1, -1);
+	private Size cvResizeDsize = new Size(0, 0);
+
 	public Mat hierarchy = new Mat();
 
 	//static {
@@ -51,7 +57,6 @@ public class GripPipelineBlue {
 	public Mat process(Mat source0) {
 		// Step CV_resize0:
 		Mat cvResizeSrc = source0;
-		Size cvResizeDsize = new Size(0, 0);
 		double cvResizeFx = 1.0;
 		double cvResizeFy = 1.0;
 		int cvResizeInterpolation = Imgproc.INTER_LINEAR;
@@ -59,15 +64,11 @@ public class GripPipelineBlue {
 
 		// Step HSV_Threshold0:
 		Mat hsvThresholdInput = cvResizeOutput;
-		double[] hsvThresholdHue = {87, 104};
-		double[] hsvThresholdSaturation = {195, 255};
-		double[] hsvThresholdValue = {94, 193};
 		hsvThreshold(hsvThresholdInput, hsvThresholdHue, hsvThresholdSaturation, hsvThresholdValue, hsvThresholdOutput);
 
 		// Step CV_erode0:
 		Mat cvErodeSrc = hsvThresholdOutput;
 		Mat cvErodeKernel = new Mat();
-		Point cvErodeAnchor = new Point(-1, -1);
 		double cvErodeIterations = 4.0;
 		int cvErodeBordertype = Core.BORDER_CONSTANT;
 		Scalar cvErodeBordervalue = new Scalar(-1);
@@ -84,6 +85,14 @@ public class GripPipelineBlue {
 
 		boolean findContoursExternalOnly = true;
 		findContours(findContoursInput, findContoursExternalOnly, findContoursOutput);
+
+		cvResizeSrc.release();
+		hsvThresholdInput.release();
+		cvErodeSrc.release();
+		cvErodeKernel.release();
+		maskInput.release();
+		maskMask.release();
+		findContoursInput.release();
 
 		return (outputMat);
 
@@ -154,9 +163,12 @@ public class GripPipelineBlue {
 	 */
 	private void hsvThreshold(Mat input, double[] hue, double[] sat, double[] val,
 	    Mat out) {
+		Scalar lowerB = new Scalar(hue[0], sat[0], val[0]);
+		Scalar upperB = new Scalar(hue[1], sat[1], val[1]);
 		Imgproc.cvtColor(input, out, Imgproc.COLOR_RGB2HSV);
-		Core.inRange(out, new Scalar(hue[0], sat[0], val[0]),
-			new Scalar(hue[1], sat[1], val[1]), out);
+		Core.inRange(out, lowerB,upperB, out);
+		lowerB = null;
+		upperB = null;
 	}
 
 	/**

@@ -33,6 +33,7 @@ public class ImageProccessingOpenCV {
     private double maxAreaRed = 0;
     private double maxAreaGreen = 0;
     private Mat draw = null;
+    private Mat output = null;
     private boolean stopRobot = false;
     private Scalar colorRed = null;
     private Scalar colorBlue = null;
@@ -193,12 +194,13 @@ public class ImageProccessingOpenCV {
              * Draw a simple box around the middle 1/2 of the entire frame
              */
 
-            Mat output;
+            output = null;
             if (true == stopRobot)
             {
                 draw = input;
             }
-            else {
+            else
+            {
                 //Log.d(TAG, "stat frame..");
                 findColorObject = false;
                 maxAreaBlue = 0;
@@ -223,8 +225,6 @@ public class ImageProccessingOpenCV {
                             maxAreaBlue = Imgproc.contourArea(gripPipelineBlue.getFindContoursOutput().get(i));
                         }
                     }
-
-
                     if (maxAreaBlue > 200) {
                         findColorObject = true;
                         labelProcessing = LabelProcessing.THREE;
@@ -287,6 +287,7 @@ public class ImageProccessingOpenCV {
                  * to change which stage of the pipeline is rendered to the viewport when it is
                  * tapped, please see {@link PipelineStageSwitchingExample}
                  */
+                output.release();
             }
             return draw;
         }
