@@ -131,7 +131,7 @@ public class ConnectionHardware {
         right_backDrive.setPower(0);
         elevatorMotor.setPower(0);
         arm_motor.setPower(0);
-        catchTheCone.setPosition(1.0);
+        catchTheCone.setPosition(0.95);
         tuningClaw.setPosition(0.25);
 
         // If there are encoders connected, switch to RUN_USING_ENCODER mode for greater accuracy
