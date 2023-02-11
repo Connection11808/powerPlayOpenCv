@@ -36,7 +36,7 @@ public class ConnectionConeAutonomousLeft extends LinearOpMode {
     static final double HEADING_THRESHOLD = 1;      // As tight as we can make it with an integer gyro
     double armPower = 0.30;
     double elevatorPower = 0.30;
-    double coneAngle = 42.5;
+    double coneAngle = 37;
     final double timeout = 4;
 
 
@@ -102,14 +102,14 @@ public class ConnectionConeAutonomousLeft extends LinearOpMode {
             connectionSleep(sleepMsec);
             gyroTurn(TURN_SPEED, 0);
             connectionSleep(sleepMsec);
-            gyroDrive(DRIVE_SPEED, 100, 0);
+            gyroDrive(DRIVE_SPEED, 105, 0);
             connectionSleep(sleepMsec);
             gyroTurn(TURN_SPEED, 0);
             connectionSleep(sleepMsec);
             gyroTurn(TURN_SPEED, coneAngle);
             connectionSleep(sleepMsec);
-            gyroTurn(TURN_SPEED, coneAngle);
-            connectionSleep(sleepMsec);
+            //gyroTurn(TURN_SPEED, coneAngle);
+            //connectionSleep(sleepMsec);
             robot.elevatorMotor.setTargetPosition(1828); //1828
             if (robot.elevatorMotor.getCurrentPosition() > 1828) { //1828
                 elevatorPower = elevatorPower * -1;
@@ -123,7 +123,10 @@ public class ConnectionConeAutonomousLeft extends LinearOpMode {
             }
             Log.d(TAG_E, "time out elevator end is: " + runtime.seconds());
             connectionSleep(sleepMsec);
-            gyroDrive(SECOND_DRIVE_SPEED, 9, coneAngle);
+
+            gyroDrive(SECOND_DRIVE_SPEED, 8, coneAngle);
+            connectionSleep(sleepMsec);
+            gyroTurn(TURN_SPEED, coneAngle);
             connectionSleep(sleepMsec);
             //gyroTurn(SECOND_DRIVE_SPEED, coneAngle);
             //connectionSleep(sleepMsec);
@@ -143,7 +146,9 @@ public class ConnectionConeAutonomousLeft extends LinearOpMode {
             gyroTurn(SECOND_DRIVE_SPEED, coneAngle);
             robot.setCatchTheConeMotor(0.6);
             connectionSleep(sleepMsec);
-            gyroDrive(DRIVE_SPEED, -7, coneAngle);
+            gyroDrive(DRIVE_SPEED, -8, coneAngle);
+            connectionSleep(sleepMsec);
+            robot.setCatchTheConeMotor(1.0);
             connectionSleep(sleepMsec);
             robot.elevatorMotor.setTargetPosition(200);
             if (robot.elevatorMotor.getCurrentPosition() > 200) {
@@ -157,8 +162,6 @@ public class ConnectionConeAutonomousLeft extends LinearOpMode {
                 Log.d(TAG_E, "elevator encoder is " + robot.getEncoderPositionElivatorMotor());
             }
             Log.d(TAG_E, "time out elevator end is: " + runtime.seconds());
-            connectionSleep(sleepMsec);
-            robot.setCatchTheConeMotor(1.0);
             connectionSleep(sleepMsec);
             robot.setTuningClawMotor(0.25);
             robot.arm_motor.setTargetPosition(0);
@@ -178,7 +181,7 @@ public class ConnectionConeAutonomousLeft extends LinearOpMode {
                 connectionSleep(sleepMsec);
                 gyroTurn(TURN_SPEED, 90);
                 connectionSleep(sleepMsec);
-                gyroDrive(SECOND_DRIVE_SPEED, 104, 90);
+                gyroDrive(SECOND_DRIVE_SPEED, 109, 90);
 
             } else if (labelProcessing == ImageProccessingOpenCV.LabelProcessing.TWO) {
                 Log.d(TAG, "It is " + labelProcessing);
@@ -198,7 +201,7 @@ public class ConnectionConeAutonomousLeft extends LinearOpMode {
                 telemetry.addLine("It is THREE");
                 gyroTurn(TURN_SPEED, 0);
                 connectionSleep(sleepMsec);
-                gyroDrive(SECOND_DRIVE_SPEED, -10, 0);
+                gyroDrive(SECOND_DRIVE_SPEED, -20, 0);
                 connectionSleep(sleepMsec);
                 gyroTurn(TURN_SPEED, 0);
 

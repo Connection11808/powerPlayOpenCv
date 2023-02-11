@@ -108,8 +108,8 @@ public class ConnectionConeAutonomousRight extends LinearOpMode {
             connectionSleep(sleepMsec);
             gyroTurn(TURN_SPEED, coneAngle);
             connectionSleep(sleepMsec);
-            gyroTurn(TURN_SPEED, coneAngle);
-            connectionSleep(sleepMsec);
+            //gyroTurn(TURN_SPEED, coneAngle);
+            //connectionSleep(sleepMsec);
             robot.elevatorMotor.setTargetPosition(1828); //1828
             if (robot.elevatorMotor.getCurrentPosition() > 1828) { //1828
                 elevatorPower = elevatorPower * -1;
@@ -123,7 +123,9 @@ public class ConnectionConeAutonomousRight extends LinearOpMode {
             }
             Log.d(TAG_E, "time out elevator end is: " + runtime.seconds());
             connectionSleep(sleepMsec);
-            gyroDrive(SECOND_DRIVE_SPEED, 9, coneAngle);
+            gyroDrive(SECOND_DRIVE_SPEED, 8, coneAngle);
+            connectionSleep(sleepMsec);
+            gyroTurn(TURN_SPEED, coneAngle);
             connectionSleep(sleepMsec);
             //gyroTurn(SECOND_DRIVE_SPEED, coneAngle);
             //connectionSleep(sleepMsec);
@@ -143,7 +145,9 @@ public class ConnectionConeAutonomousRight extends LinearOpMode {
             gyroTurn(SECOND_DRIVE_SPEED, coneAngle);
             robot.setCatchTheConeMotor(0.6);
             connectionSleep(sleepMsec);
-            gyroDrive(DRIVE_SPEED, -7, coneAngle);
+            gyroDrive(DRIVE_SPEED, -8, coneAngle);
+            connectionSleep(sleepMsec);
+            robot.setCatchTheConeMotor(1.0);
             connectionSleep(sleepMsec);
             robot.elevatorMotor.setTargetPosition(200);
             if (robot.elevatorMotor.getCurrentPosition() > 200) {
@@ -157,8 +161,6 @@ public class ConnectionConeAutonomousRight extends LinearOpMode {
                 Log.d(TAG_E, "elevator encoder is " + robot.getEncoderPositionElivatorMotor());
             }
             Log.d(TAG_E, "time out elevator end is: " + runtime.seconds());
-            connectionSleep(sleepMsec);
-            robot.setCatchTheConeMotor(1.0);
             connectionSleep(sleepMsec);
             robot.setTuningClawMotor(0.25);
             robot.arm_motor.setTargetPosition(0);
@@ -187,7 +189,7 @@ public class ConnectionConeAutonomousRight extends LinearOpMode {
                 telemetry.addLine("It is TWO");
                 gyroTurn(TURN_SPEED, -90);
                 connectionSleep(sleepMsec);
-                gyroDrive(SECOND_DRIVE_SPEED, 51, -90);
+                gyroDrive(SECOND_DRIVE_SPEED, 57, -90);
                 connectionSleep(sleepMsec);
                 gyroTurn(TURN_SPEED, 0);
                 connectionSleep(sleepMsec);
@@ -201,7 +203,7 @@ public class ConnectionConeAutonomousRight extends LinearOpMode {
                 connectionSleep(sleepMsec);
                 gyroTurn(TURN_SPEED, -90);
                 connectionSleep(sleepMsec);
-                gyroDrive(SECOND_DRIVE_SPEED, 108, -90);
+                gyroDrive(SECOND_DRIVE_SPEED, 109, -90);
 
             }
 
